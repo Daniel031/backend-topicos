@@ -18,11 +18,22 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'nombre_usuario',
         'email',
         'password',
+        'ultimo_cambio_password',
+        'verificacion_email',
+        'token_sesion',
+        'creacion_token_sesion',
+        'ultimo_inicio_sesion',
+        'persona_ci',
+        'ubicacion_id'
     ];
 
+    public function userRol()
+    {
+        return $this->hasMany(UserRol::class);
+    }
     /**
      * The attributes that should be hidden for serialization.
      *
