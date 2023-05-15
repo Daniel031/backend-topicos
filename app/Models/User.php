@@ -23,10 +23,14 @@ class User extends Authenticatable
         'password',
         'ultimo_cambio_password',
         'creacion_token',
-        'ultimo_inicio_sesion'
+        'ultimo_inicio_sesion',
 
     ];
 
+    public function userRol()
+    {
+        return $this->hasMany(UserRol::class);
+    }
     /**
      * The attributes that should be hidden for serialization.
      *
