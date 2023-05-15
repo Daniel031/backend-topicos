@@ -61,7 +61,8 @@ class RegistroController extends Controller
 
         $request->user()->currentAccessToken()->delete();
         return response()->json([
-            'res' => true
+            'res' => true,
+            'token' => 'Token eliminado Con Exito'
         ]);
     }
 }

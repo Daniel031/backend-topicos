@@ -26,8 +26,16 @@ Route::post('/users',[RegistroController::class,'registrar']);
 Route::post('/users-login',[RegistroController::class,'login']);
 
 
-Route::middleware(['auth', 'sanctum'])->group(function () {
+// Route::middleware(['auth', 'sanctum'])->group(function () {
 
-    Route::post('/user-logout',[RegistroContoller::class,'logout']);
+//     Route::post('/user-logout',[RegistroContoller::class,'logout']);
 
+// });
+
+
+Route::group(['middleware'=>['auth:sanctum']],function(){
+
+    Route::post('/user-logout',[RegistroController::class,'logout']);
 });
+
+
