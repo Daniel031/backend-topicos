@@ -20,6 +20,8 @@ return new class extends Migration
             $table->dateTime('creacion_token')->nullable();
             $table->dateTime('ultimo_inicio_sesion')->nullable();
             $table->unsignedSmallInteger('intentos')->default(0);
+            $table->boolean('estado')->default(1);
+            $table->dateTime('fecha_desbloqueo')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();

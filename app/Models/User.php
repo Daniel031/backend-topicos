@@ -24,6 +24,7 @@ class User extends Authenticatable
         'ultimo_cambio_password',
         'creacion_token',
         'ultimo_inicio_sesion',
+        'fecha_desbloqueo',
 
     ];
 

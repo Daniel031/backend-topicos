@@ -37,23 +37,90 @@ class RegistroController extends Controller
         
         $user = User::where('email',$request['email'])->first();
         
+        if($user){
+            if($user->fecha_desbloqueo){
+                $fechaActual = Carbon::now();
+                $minutos = $fechaActual->diffInMinutes($user->fecha_desbloqueo);
+                    if($minutos>2){
+                        $user->estado=1;
+                        $user->intentos=0;
+                        $user->fecha_desbloqueo=null;
+
+                        // $user->save();
+
+                        if($user && Hash::check($request['password'],$user->password)){
+                            $token = $user->createToken($user->email)->plainTextToken;
+                            $user->creacion_token=Carbon::now();
+                            $user->save();
+
+                            return response()->json([
+                                'res' => true,
+                                'token' => $token,
+                            ]);
+
+                            
+                        }
+                        $user->save();
+                        return response()->json([
+                            'res' => false,
+                            'mensaje' => 'Usuario Desbloqueado Inicie con Datos correctos',
+                        ]);
+                    }
+            }
+
+        }
+        
+        
             if(! $user || !Hash::check($request['password'],$user->password)){
+                
+                 if($user){
+                    $intentos = $user->intentos;
+                    $user->intentos=$intentos+1;
+                   
+                    if($user->intentos === 3){
+                        $user->estado=0;
+                        $user->fecha_desbloqueo=Carbon::now();
+                    }
+                     $user->save();
+                 }
                 return response()->json([
                     'res' => False,
                     'mensaje' => "Datos Incorrectos",
                 ]);
             }
 
-            $token =$user->createToken($request['email'])->plainTextToken;
-            $user->update([
-                'creacion_token' => Carbon::now()
-            ]);
+            if($user->estado == 1){
+
+                $user->estado=1;
+                $user->intentos=0;
+                $user->fecha_desbloqueo=null;
+    
+                $token =$user->createToken($request['email'])->plainTextToken;
+                $user->fecha_desbloqueo=Carbon::now();
+                $user->save();
+    
+                return response()->json([
+                    'res' => true,
+                    'token' => $token,
+                    'mensaje' => 'Login Exitoso',
+                   
+                ]);
+            }
 
             return response()->json([
-                'res' => true,
-                'token' => $token,
-                'mensaje' => 'Login Exitoso',
+                'res' => False,
+                'mensaje' => "Usuario Bloqueado",
             ]);
+            
+           
+    }
+
+
+
+    public function cambiarContraseña(UpdatePasswordRequest $request){
+
+        
+
     }
 
 

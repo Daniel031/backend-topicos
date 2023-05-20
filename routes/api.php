@@ -36,6 +36,9 @@ Route::post('/users-login',[RegistroController::class,'login']);
 Route::group(['middleware'=>['auth:sanctum']],function(){
 
     Route::post('/user-logout',[RegistroController::class,'logout']);
+    // Route::get('/usuarios',[RegistroController::class,'usuarios']);
 });
+
+
 
 
