@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Registro\RegistroController;
+use App\Http\Controllers\Registro\VerificarEmailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +25,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/users',[RegistroController::class,'registrar']);
 Route::post('/users-login',[RegistroController::class,'login']);
+
+Route::get('/users-send',[VerificarEmailController::class,'formularioDatos']);
+Route::post('/users-verificar',[VerificarEmailController::class,'enviar'])->name('users.formulario');
 
 
 // Route::middleware(['auth', 'sanctum'])->group(function () {
