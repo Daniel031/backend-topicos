@@ -10,27 +10,67 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
 class RegistroController extends Controller
 {
     
 
     public function registrar(RegistrarRequest $request){
+        $email = $request['email'];
+        $codigo=  rand(100000,999999);
+
 
         $user = User::create([
             'name' => $request['name'],
             'email' => $request['email'],
             'password' =>bcrypt($request['password']),
             'ultimo_cambio_password' => Carbon::now(),
+            'codigo_verificacion' =>$codigo,
         ]);
+
+        $mail = new PHPMailer(true);
+
+        try {
+            $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+            $mail->isSMTP();                                            //Send using SMTP
+            $mail->Host       = 'smtp.gmail.com';                    //Set the SMTP server to send through
+            $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+            $mail->Username   = 'dilker72@gmail.com';                     //SMTP username
+            $mail->Password   = 'opfexbzzwbbagutj';                               //SMTP password
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+            $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you 
+            $mail->setFrom('dilker72@gmail.com', 'Denuncias Santa Cruz');
+            $mail->addAddress($email);     //Add a recipient
+          
+            $mail->isHTML(true);                                  //Set email format to HTML
+            $mail->Subject = 'Verificacion de Email';
+            $mail->Body    = "Su codigo de verificacion es para el sistema de Denuncias es :  ". $codigo;
+            $mail->send();
+
+        } catch (Exception $e) {
+
+            return response()->json([
+                'res' => false,
+                'mensaje' => 'Ocurrio Un Problemas con los datos',
+                'status' => 500,   
+            ],500);
+    
+        }
 
         return response()->json([
             'res' => true,
             'mensaje' => 'Usuario Creado con Exito',
             'status' => 200,
              
-    ],200);
+        ],200);
 
-    }
+
+}
+
+       
 
 
     public function login(LoginRequest $request){

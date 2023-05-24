@@ -25,6 +25,7 @@ class User extends Authenticatable
         'creacion_token',
         'ultimo_inicio_sesion',
         'fecha_desbloqueo',
+        'codigo_verificacion'
 
     ];
 

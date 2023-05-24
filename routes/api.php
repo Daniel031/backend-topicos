@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Registro\RegistroController;
 use App\Http\Controllers\Registro\VerificarEmailController;
+use App\Http\Controllers\Registro\ComprobarRostroController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,11 +24,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 /** RUTAS DE REGISTROS "LOGIN" PARA LOS USUARIOS  */
 
-Route::post('/users',[RegistroController::class,'registrar']);
-Route::post('/users-login',[RegistroController::class,'login']);
+Route::post('/users',[RegistroController::class,'registrar']); // se crean sus datos en la base de datos
+Route::post('/users-login',[RegistroController::class,'login']); // se loguea el user
 
-Route::get('/users-send',[VerificarEmailController::class,'formularioDatos']);
-Route::post('/users-verificar',[VerificarEmailController::class,'enviar'])->name('users.formulario');
+Route::post('/users-comprobacion',[ComprobarRostroController::class,'comparar']); // se envia la foto para aws
+
+// Route::get('/users-send',[VerificarEmailController::class,'formularioDatos']);
+// Route::post('/users-verificar',[VerificarEmailController::class,'enviar'])->name('users.formulario');
 
 
 // Route::middleware(['auth', 'sanctum'])->group(function () {
