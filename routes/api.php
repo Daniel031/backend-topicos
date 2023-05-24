@@ -33,6 +33,12 @@ Route::post('/users-comprobacion',[ComprobarRostroController::class,'comparar'])
 // Route::post('/users-verificar',[VerificarEmailController::class,'enviar'])->name('users.formulario');
 
 
+//ruta post que escribio jose luis padilla
+Route::post('/users-codigoVerificacionEmail',[VerificarEmailController::class,'VerificarCodigoEmail']);
+
+
+
+
 // Route::middleware(['auth', 'sanctum'])->group(function () {
 
 //     Route::post('/user-logout',[RegistroContoller::class,'logout']);

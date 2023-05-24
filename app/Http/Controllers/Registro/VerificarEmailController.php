@@ -10,6 +10,8 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 use Carbon\Carbon;
 
+use App\Models\User;
+
 class VerificarEmailController extends Controller
 {
     
@@ -60,6 +62,40 @@ class VerificarEmailController extends Controller
             //     echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
             // }
 
+
+    }
+
+    //metodo que escribio jose luis padilla
+    public function VerificarCodigoEmail(Request $request){
+
+        $email = $request['email'];
+        $codigo = $request['codigo_verificacion'];
+
+        $user = User::where('email', $request['email'])->first();
+
+        if($user){
+
+            if($user->codigo_verificacion == $codigo){
+                $fechaActual = Carbon::now();
+                $user->email_verified_at = $fechaActual;
+                $user->save();
+                return response()->json([
+                    'res' => true,
+                    'mensaje' => "el codigo fue verificado correctamente",
+                ]);
+            }else{
+                return response()->json([
+                    'res' => false,
+                    'mensaje' => "el codigo no pudo ser verficado",
+                ]);
+            }
+
+        }
+
+        return response()->json([
+            'res' => false,
+            'mensaje' => "el correo electronico no pertenence a ningun usuario",
+        ]);
 
     }
 }
