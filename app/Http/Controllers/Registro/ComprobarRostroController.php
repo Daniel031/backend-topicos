@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Registro;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Aws\Rekognition\RekognitionClient;
 
 class ComprobarRostroController extends Controller
 {
@@ -17,9 +18,39 @@ class ComprobarRostroController extends Controller
 
 
     public function comparar(Request $request){
+
+        $cliente = new RekognitionClient([
+            'region' => env('AWS_DEFAULT_REGION'),
+            'version' =>'latest'
+        ]);
+
+        $rutaimagen1 = public_path("img1.jpg");
+        $rutaimagen2=public_path("img2.jpg");
+
+
+        $imagen1 = file_get_contents($rutaimagen1);
+        $imagen2 = file_get_contents($rutaimagen2);
+
+        $result = $cliente->compareFaces([
+            'SimilarityThreshold' => 70, // Umbral de similitud (ajusta según tus necesidades)
+            'SourceImage' => [
+                'Bytes' => $imagen1,
+            ],
+            'TargetImage' => [
+                'Bytes' => $imagen2,
+            ],
+        ]);
+
+
+        $faceMatches = $result['FaceMatches'];
+
+
+
+
         return response()->json([
             'res' => true,
-            'mensaje' => "El usuario esta registrado en el segip"
+            'mensaje' => "El usuario esta registrado en el segip",
+            'resultado-aws'=> $faceMatches,
         ]);
     }
 
