@@ -33,7 +33,7 @@ class RegistroController extends Controller
             'codigo_verificacion' =>$codigo,
         ]);
 
-        $contraseña = Contraseña::create([+
+        $contraseña = Contraseña::create([
             'password'=>bcrypt($request['password']),
             'activo'=>1,
             'user_id'=>$user->id,
