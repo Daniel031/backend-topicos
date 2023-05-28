@@ -10,7 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\Http\Model\Contraseña;
+use App\Models\Contraseña;
 
 
 class User extends Authenticatable

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\RegistrarRequest;
 use App\Http\Requests\LoginRequest;
+use App\Models\Contraseña;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Hash;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
+use PhpParser\Node\Stmt\Foreach_;
 
 class RegistroController extends Controller
 {
@@ -29,6 +31,12 @@ class RegistroController extends Controller
             'password' =>bcrypt($request['password']),
             'ultimo_cambio_password' => Carbon::now(),
             'codigo_verificacion' =>$codigo,
+        ]);
+
+        $contraseña = Contraseña::create([+
+            'password'=>bcrypt($request['password']),
+            'activo'=>1,
+            'user_id'=>$user->id,
         ]);
 
         $mail = new PHPMailer(true);
@@ -157,10 +165,74 @@ class RegistroController extends Controller
 
 
 
-    public function cambiarContraseña(UpdatePasswordRequest $request){
+    public function actualizarContraseña(Request $request){
 
+        $email = $request['email'];
+        $passwordActual = $request['password_actual'];
+        $passwordNuevo = $request['password_nuevo'];
+
+        $user = User::where('email', $request['email'])->first();
+
+        if($user){
+
+           if(Hash::check($passwordActual, $user->password)){
+
+            $listaPasswordUsuario = $user->contraseñas;
+            $yaExistePassword = false;
+ 
+            foreach ($listaPasswordUsuario as $passwordModelo) {
+ 
+              if(Hash::check($passwordNuevo, $passwordModelo->password)){
+                 $yaExistePassword = true;
+                 break;
+              } 
+              
+            }
+ 
+            
+            if(!$yaExistePassword){
+ 
+            /*  Contraseña::where('activo', 1)
+                         ->where('user_id',$user->id)
+                         ->update(['activo'=> 0]); */
+            $contraseña = Contraseña::where('user_id','=',$user->id)->where('activo', 1)->first();
+            $contraseña->update([
+                "activo"=>0,
+            ]);
+            /* $contraseña->save(); */
+             Contraseña::create([ 
+                 'password'=>bcrypt($passwordNuevo),
+                 'activo'=>1,
+                 'user_id'=> $user->id,
+             ]);
+ 
+             $user->password = bcrypt($passwordNuevo);
+             $user->save();
+             return response()->json([
+                 'res' => true,
+                 'mensaje' => "la contrseña ha sido actualizada",
+             ]);
+ 
+            }
+ 
+                return response()->json([
+                'res' => false,
+                'mensaje' => "la contraseña no ha sido actualizada porque es repetida",
+                ]);
+           }
+
+           return response()->json([
+            'res' => false,
+            'mensaje' => "la contraseña no ha sido actualizada porque la contraseña actual no corresponde a la contraseña que el usuario tiene asociada",
+            ]);
+           
+        }
+
+        return response()->json([
+            'res' => false,
+            'mensaje' => "el correo introducido no esta asociado a ningun usuario",
+            ]);
         
-
     }
 
 
