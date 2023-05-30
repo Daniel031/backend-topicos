@@ -8,7 +8,7 @@ use App\Http\Requests\RegistrarRequest;
 use App\Http\Requests\LoginRequest;
 use App\Models\Contraseña;
 use App\Models\User;
-use Carbon\Carbon;
+use Carbon\Carbon; 
 use Illuminate\Support\Facades\Hash;
 
 use PHPMailer\PHPMailer\PHPMailer;
