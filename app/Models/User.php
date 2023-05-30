@@ -11,6 +11,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\Contraseña;
+use App\Models\Denuncia;
 
 
 class User extends Authenticatable
@@ -62,5 +63,11 @@ class User extends Authenticatable
     public function contraseñas(): HasMany
     {
         return $this->hasMany(Contraseña::class);
+    }
+
+
+    public function denuncias():HasMany
+    {
+        return $this->hasMany(Denuncia::class);
     }
 }
