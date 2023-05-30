@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DenunciasController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Registro\RegistroController;
@@ -37,7 +38,8 @@ Route::post('/users-actualizarContraseña',[RegistroController::class,'actualiza
 //ruta post que escribio jose luis padilla
 Route::post('/users-codigoVerificacionEmail',[VerificarEmailController::class,'VerificarCodigoEmail']);
 
-
+//ruta post que escribio jose luis padilla para recibir las denuncias y analizar su data
+Route::post('/users-denunciar',[DenunciasController::class,'denunciar']);
 
 
 // Route::middleware(['auth', 'sanctum'])->group(function () {
