@@ -23,16 +23,15 @@ class GuardarDenunciaRequest extends FormRequest
     {
         return [
             
-            'user_id'
-            'titulo' = 'required',
-            'descripcion' = 'required',
-            'fecha'
-            'estado' // ESTADO 1 DICE PENDIENTE DE REVISION
-            'hash'
-            'latitud'
-            'longitud'
-            $table->unsignedSmallInteger('tipo_denuncia');
-            $table->timestamps();
+            'user_id' => 'required|email',
+            'titulo' => 'required',
+            'descripcion' => 'required',
+            'tipo_denuncia' => 'required',
+            'latitud' => 'required',
+            'longitud' => 'required',
+            'imagen1' => 'required',
+            'email' => 'required',
+           
         ];
     }
 }
