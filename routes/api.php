@@ -42,6 +42,12 @@ Route::post('/users-codigoVerificacionEmail',[VerificarEmailController::class,'V
 Route::post('/users-denunciar',[DenunciasController::class,'denunciar']);
 
 
+//ruta get que escribio jose luis padilla traer todas las denuncias que son realizadas por un usuario
+Route::get('/users-denunciasUsuario',[DenunciasController::class,'mostrarDenunciasUsuario']);
+
+
+
+
 // Route::middleware(['auth', 'sanctum'])->group(function () {
 
 //     Route::post('/user-logout',[RegistroContoller::class,'logout']);
