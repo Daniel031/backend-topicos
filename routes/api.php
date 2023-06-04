@@ -43,7 +43,7 @@ Route::post('/users-denunciar',[DenunciasController::class,'denunciar']);
 
 
 
-Route::post('/users-analizar',[DenunciasController::class,'sendMessage']);
+Route::get('/users-analizar',[DenunciasController::class,'sendMessage']);
 
 
 

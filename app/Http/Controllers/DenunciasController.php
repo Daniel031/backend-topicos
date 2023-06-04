@@ -11,6 +11,7 @@ use App\Models\FotoDenuncia;
 use App\Models\Label;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
 
 
 use App\Helpers\OpenAIChat;
@@ -34,7 +35,15 @@ class DenunciasController extends Controller
         $email = $request['email'];
         $user_id = User::where('email',$email)->first();
 
+        // return response()->json([
+        //     'DA ERROR' => $request['imagen1']
+        // ]);
 
+        // $datoChat = $this->analizarDescripcion('Dilker Cartagena Pedraza');
+        // return response()->json([
+        //     'Datos Den' => $datoChat,
+        //     'imagenes' =>$request['imagen1']
+        // ]);
         $cliente = new RekognitionClient([
             'region' => env('AWS_DEFAULT_REGION'),
             'version' =>'latest'
@@ -107,7 +116,7 @@ class DenunciasController extends Controller
                   
 
                     if($contiene){
-                        if($this->analizarDescripcion($request['descripcion'])===True){
+                        if($this->analizarDescripcion($request['descripcion'])=="F"){
                             $datosHash = hash('sha1',$request['descripcion'].''.$request['tipo_denuncia']);
                                     $denuncia = Denuncia::create([
                                     'titulo' =>$titulo,
@@ -180,7 +189,7 @@ class DenunciasController extends Controller
                     }
 
                     if($contiene){
-                        if($this->analizarDescripcion($request['descripcion'])){
+                        if($this->analizarDescripcion($request['descripcion'])=="F"){
                             $datosHash = hash('sha1',$request['descripcion'].''.$request['tipo_denuncia']);
                                     $denuncia = Denuncia::create([
                                     'titulo' =>$titulo,
@@ -219,8 +228,9 @@ class DenunciasController extends Controller
                     
                 }
             }
-        }
+        
 
+        }
 
                 return response()->json([
                     'res' => False,
@@ -230,19 +240,67 @@ class DenunciasController extends Controller
     }
 
 
-    // public function sendMessage(Request $request)
-    // {
-    //     return response()->json([
-    //         'res' => True,
-    //     ]);
-    // }
+    public function analizarDescripcion($descripcion)
+    {
+        $mensaje = 'Responde True si el texto despues de los 2 puntos contiene lenguaje ofensivo y responde False si el texto despues de los 2 puntos no contiene lenguaje ofensivo :'.$descripcion;
 
+        $datos = Http::withHeaders([
+            'Content-type' =>'application/json',
+            'Authorization' => 'Bearer '.env('OPENAI_API_KEY'),
+        ])->post('https://api.openai.com/v1/chat/completions',[
+            "model" => "gpt-3.5-turbo",
+            "messages" => [
+                [
+                    'role' => 'user',
+                    'content' => $mensaje
+                ]
+                ],
+            'temperature' => 0.5,
+            'max_tokens' => 200,
+            'top_p' => 1.0,
+            'frequency_penalty' => 0.52,
+            'presence_penalty' => 0.5,
+            'stop' => ["11."],
+            ])->json();
 
-
-    public function analizarDescripcion($descripcion){
-
-        return True;
+            return response()->json(substr($datos['choices'][0]['message']['content'],0,1));
     }
+
+
+
+
+    public function sendMessage(Request $request){
+        $mensaje = 'Responde solamente True si el texto despues de los 2 puntos tiene lenguaje ofensivo y responde con False si no tiene lenguaje ofensivo :'.$request['descripcion'];
+
+        $datos = Http::withHeaders([
+            'Content-type' =>'application/json',
+            'Authorization' => 'Bearer '.env('OPENAI_API_KEY'),
+        ])->post('https://api.openai.com/v1/chat/completions',[
+            "model" => "gpt-3.5-turbo",
+            "messages" => [
+                [
+                    'role' => 'user',
+                    'content' => $mensaje
+                ]
+                ],
+            'temperature' => 0.5,
+            'max_tokens' => 200,
+            'top_p' => 1.0,
+            'frequency_penalty' => 0.52,
+            'presence_penalty' => 0.5,
+            'stop' => ["11."],
+            ])->json();
+
+            return response()->json(substr($datos['choices'][0]['message']['content'],0,1));
+
+    }
+
+
+
+    // public function analizarDescripcion($descripcion){
+
+    //     return True;
+    // }
 
 
     // public function analizarDescripcion(Request $request){
