@@ -47,6 +47,103 @@ class LabelSeeder extends Seeder
             'tipo' => '1',
          ],
 
+         //etiquetas de vias publicas
+         [
+            'label' => 'Water',
+            'tipo' => '2',
+         ],
+         [
+            'label' => 'Puddle',
+            'tipo' => '2',
+         ],
+         [
+            'label' => 'Tar',
+            'tipo' => '2',
+         ],
+         [
+            'label' => 'Tarmac',
+            'tipo' => '2',
+         ],
+         [
+            'label' => 'Road',
+            'tipo' => '2',
+         ],
+         [
+            'label' => 'Soil',
+            'tipo' => '2',
+         ],
+         [
+            'label' => 'Street',
+            'tipo' => '2',
+         ],
+         [
+            'label' => 'Urban',
+            'tipo' => '2',
+         ],
+
+         //etiquetas de vias alumbrado publico
+         [
+            'label' => 'Lighting',
+            'tipo' => '3',
+         ],
+         [
+            'label' => 'Street',
+            'tipo' => '3',
+         ],
+         [
+            'label' => 'City',
+            'tipo' => '3',
+         ],
+         [
+            'label' => 'Light',
+            'tipo' => '3',
+         ],
+         [
+            'label' => 'Tarmac',
+            'tipo' => '3',
+         ],
+         [
+            'label' => 'Freeway',
+            'tipo' => '3',
+         ],
+         [
+            'label' => 'Lamp',
+            'tipo' => '3',
+         ],
+         [
+            'label' => 'Lamp Post',
+            'tipo' => '3',
+         ],
+
+         [
+            'label' => 'Lampshade',
+            'tipo' => '3',
+         ],
+         [
+            'label' => 'Outdoors',
+            'tipo' => '3',
+         ],
+         [
+            'label' => 'Urban',
+            'tipo' => '3',
+         ],
+         [
+            'label' => 'Night',
+            'tipo' => '3',
+         ],
+         [
+            'label' => 'Alley',
+            'tipo' => '3',
+         ],
+         [
+            'label' => 'Neighborhood',
+            'tipo' => '3',
+         ],
+         [
+            'label' => 'Utility Pole',
+            'tipo' => '3',
+         ],
+         
          //etiquetas de alcantarillado
          [
             'label' => 'Flood',
