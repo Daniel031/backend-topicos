@@ -8,6 +8,7 @@ use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Aws\Rekognition\RekognitionClient;
 use App\Models\Denuncia;
 use App\Models\FotoDenuncia;
+use App\Models\Label;
 use App\Models\User;
 use Carbon\Carbon;
 
@@ -69,7 +70,7 @@ class DenunciasController extends Controller
                         $i++;
                     }
 
-                    $descripciones = Label::where('tipo',$tipo_denuncia)->get(); //DATOS PARA COMPARAR CON LA IA
+                    $descripciones = Label::where('tipo_denuncia',$tipo_denuncia)->get(); //DATOS PARA COMPARAR CON LA IA
                     $contiene = False;
                     foreach($descripciones as $descrip){
                                 if(in_array($descrip->label,$datos)){
@@ -87,25 +88,26 @@ class DenunciasController extends Controller
                             'MinConfidence' => 80,
                         ]);
 
-                    $result = $result['Labels'];
-                    $datos =[];
-                    $i=0;
-                    foreach($result as $res){
-                        $datos[$i] =$res['Name']; /// AQUI ESTAN LAS ETIQUETAS DE LA IA EN FOTOS
-                        $i++;
-                    }
+                        $result = $result['Labels'];
+                        $datos =[];
+                        $i=0;
+                        foreach($result as $res){
+                            $datos[$i] =$res['Name']; /// AQUI ESTAN LAS ETIQUETAS DE LA IA EN FOTOS
+                            $i++;
+                        }
 
-                    $descripciones = Label::where('tipo',$tipo_denuncia)->get(); //DATOS PARA COMPARAR CON LA IA
-                    $contiene = False;
-                    foreach($descripciones as $descrip){
-                                if(in_array($descrip->label,$datos)){
-                                    $contiene = True;
-                                    break;
-                                }
-                    }
+                        $descripciones = Label::where('tipo_denuncia',$tipo_denuncia)->get(); //DATOS PARA COMPARAR CON LA IA
+                        $contiene = False;
+                        foreach($descripciones as $descrip){
+                                    if(in_array($descrip->label,$datos)){
+                                        $contiene = True;
+                                        break;
+                                    }
+                        }
+                  
 
                     if($contiene){
-                        if(analizarDescripcion($request['descripcion'])){
+                        if($this->analizarDescripcion($request['descripcion'])===True){
                             $datosHash = hash('sha1',$request['descripcion'].''.$request['tipo_denuncia']);
                                     $denuncia = Denuncia::create([
                                     'titulo' =>$titulo,
@@ -130,11 +132,14 @@ class DenunciasController extends Controller
                             'url' => $url2,
                             'id_url' =>234234,
                             'estado' => 1,
-                    ]);
+                        ]);
+
+                        return response()->json([
+                            'res' => True,
+                            'labels' => 'Denuncia Creada Con Exito',
+                           
+                        ]);
                     }
-
-
-
                     }else{
                         return response()->json([
                             'res' => False,
@@ -165,7 +170,7 @@ class DenunciasController extends Controller
                         $i++;
                     }
 
-                    $descripciones = Label::where('tipo',$tipo_denuncia)->get(); //DATOS PARA COMPARAR CON LA IA
+                    $descripciones = Label::where('tipo_denuncia',$tipo_denuncia)->get(); //DATOS PARA COMPARAR CON LA IA
                     $contiene = False;
                     foreach($descripciones as $descrip){
                                 if(in_array($descrip->label,$datos)){
@@ -175,7 +180,7 @@ class DenunciasController extends Controller
                     }
 
                     if($contiene){
-                        if(analizarDescripcion($request['descripcion'])){
+                        if($this->analizarDescripcion($request['descripcion'])){
                             $datosHash = hash('sha1',$request['descripcion'].''.$request['tipo_denuncia']);
                                     $denuncia = Denuncia::create([
                                     'titulo' =>$titulo,
@@ -225,9 +230,18 @@ class DenunciasController extends Controller
     }
 
 
-    public function sendMessage(Request $request)
-    {
-        return false;
+    // public function sendMessage(Request $request)
+    // {
+    //     return response()->json([
+    //         'res' => True,
+    //     ]);
+    // }
+
+
+
+    public function analizarDescripcion($descripcion){
+
+        return True;
     }
 
 
