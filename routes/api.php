@@ -42,7 +42,10 @@ Route::post('/users-codigoVerificacionEmail',[VerificarEmailController::class,'V
 Route::post('/users-denunciar',[DenunciasController::class,'denunciar']);
 
 
+
 Route::post('/users-analizar',[DenunciasController::class,'sendMessage']);
+
+
 
 
 // Route::middleware(['auth', 'sanctum'])->group(function () {
