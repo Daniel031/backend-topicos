@@ -326,6 +326,19 @@ class DenunciasController extends Controller
 
     // }
 
+    public function mostrarDenunciasUsuario(Request $request){
+        
+        $user = User::where('email', $request['email'])->first();
+
+        $listaDenuncias = Denuncia::where('user_id',$user->id)->get();
+        
+        return response()->json([
+            'res' => true,
+            'mensaje' => "lista de denuncias hechas por un usuario",
+            'data' => $listaDenuncias,
+        ]);
+    }
+
 
 
     public function index()
