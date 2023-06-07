@@ -46,8 +46,10 @@ Route::post('/users-denunciar',[DenunciasController::class,'denunciar']);
 Route::get('/users-analizar',[DenunciasController::class,'sendMessage']);
 
 
+Route::get('/users-denuncias',[DenunciasController::class,'mostrarDenunciasUsuario']);
 
 
+Route::get('/index',[DenunciasController::class,'index']);
 // Route::middleware(['auth', 'sanctum'])->group(function () {
 
 //     Route::post('/user-logout',[RegistroContoller::class,'logout']);
@@ -60,6 +62,11 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::post('/user-logout',[RegistroController::class,'logout']);
     // Route::get('/usuarios',[RegistroController::class,'usuarios']);
 });
+
+
+Route::post('/users-actualizar',[DenunciasController::class,'update']);
+
+Route::post('/users-eliminar',[DenunciasController::class,'destroy']);
 
 
 
