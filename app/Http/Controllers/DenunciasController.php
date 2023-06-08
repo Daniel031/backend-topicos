@@ -40,6 +40,21 @@ class DenunciasController extends Controller
         $email = $request['email'];
         $user_id = User::where('email',$email)->first();
 
+        $hashPrueba = hash('sha1',$request['descripcion'].''.$request['tipo_denuncia']);
+        $denunciasPruebas = Denuncia::where('user_id',$user_id)->where('estado','=','1')->get();
+
+            foreach($denunciasPruebas as $den){
+                    if($den->hash == $hasPrueba){
+                        return response()->json([
+                            'res' => False,
+                            'mensaje' => 'Denuncia Ingresada Anteriormente',
+                        ]);
+                    }
+            }
+
+        
+            
+
         $cliente = new RekognitionClient([
             'region' => env('AWS_DEFAULT_REGION'),
             'version' =>'latest'
@@ -52,7 +67,7 @@ class DenunciasController extends Controller
                  $public_id_imagen1=$fotoCloud1->getPublicId();
                  $url1 =$fotoCloud1->getSecurePath();
 
-                    if($request->hasFile['imagen2']){           // SI ENTRA AQUI TIEN2 2 IMAGENES
+                    if($request->hasFile('imagen2')){           // SI ENTRA AQUI TIEN2 2 IMAGENES
 
                         $imagen2 = $request->file('imagen2');
                         $fotoCloud2 =Cloudinary::upload($imagen2->getRealPath(),['folders'=>'fotografos']);
@@ -65,7 +80,7 @@ class DenunciasController extends Controller
                             ],
                             'MaxLabels' => 15,
                             'MinConfidence' => 80,
-                     ]);
+                        ]);
     
                         $result = $result['Labels'];
                         $datos =[];
@@ -195,7 +210,7 @@ class DenunciasController extends Controller
 
                     
                     if($contiene){
-                        if($this->analizarDescripcion($request['descripcion'])=="F"){
+                        if($this->analizarDescripcion($request['descripcion'])=='F'){
                             $datosHash = hash('sha1',$request['descripcion'].''.$request['tipo_denuncia']);
                                     $denuncia = Denuncia::create([
                                     'titulo' =>$titulo,
@@ -469,7 +484,7 @@ class DenunciasController extends Controller
 
     public function analizarDescripcion($descripcion)
     {
-        $mensaje = 'Responde True si el texto despues de los 2 puntos contiene lenguaje ofensivo y responde False si el texto despues de los 2 puntos no contiene lenguaje ofensivo :'.$descripcion;
+        $mensaje = 'Responde solamente True si el texto despues de los 2 puntos tiene lenguaje ofensivo y responde con False si no tiene lenguaje ofensivo:'.$descripcion;
 
         $datos = Http::withHeaders([
             'Content-type' =>'application/json',
@@ -490,7 +505,7 @@ class DenunciasController extends Controller
             'stop' => ["11."],
             ])->json();
 
-            return response()->json(substr($datos['choices'][0]['message']['content'],0,1));
+            return substr($datos['choices'][0]['message']['content'],0,1);
     }
 
 
@@ -517,8 +532,11 @@ class DenunciasController extends Controller
             'presence_penalty' => 0.5,
             'stop' => ["11."],
             ])->json();
+            $dat = substr($datos['choices'][0]['message']['content'],0,1)==="F";
+            // $t ='F';
+            // $re = $dat ==$t,
 
-            return response()->json(substr($datos['choices'][0]['message']['content'],0,1));
+            return response()->json(['res'=>substr($datos['choices'][0]['message']['content'],0,1),'datos' => $dat]);
 
     }
 
@@ -559,11 +577,24 @@ class DenunciasController extends Controller
 
         $listaDenuncias = Denuncia::where('user_id',$user->id)->where('estado','=','1')->get();
         
+            foreach($listaDenuncias as $denuncia){
+
+                    $fotos = FotoDenuncia::where('denuncia_id',$denuncia->id)->get();
+                    $nombre="imagen1";
+                        foreach($fotos as $actual){
+                            $denuncia[$nombre]=$actual->url;
+                            $nombre="imagen2";
+
+                        }
+
+            }
+        
         return response()->json([
             'res' => true,
             'mensaje' => "lista de denuncias hechas por un usuario",
             'data' => $listaDenuncias,
         ]);
+
 
     }
 
@@ -596,7 +627,226 @@ class DenunciasController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
+
+
+
+    public function update(Request $request){
+
+        $titulo = $request['titulo'];
+        $descripcion =$request['descripcion'];
+        $tipo_denuncia =$request['tipo_denuncia'];
+        $fecha = Carbon::now();
+        $denuncia_id =$request['denuncia_id'];
+        $fecha = date("m.d.y"); 
+        $hora = date("H:i:s");
+        $latitud = $request['latitud'];
+        $longitud = $request['longitud'];
+        $email =$request['email'];
+        $user =User::where('email',$email)->first();
+        $denuncia = Denuncia::where('id',$denuncia_id)->where('user_id',$user->id)->first();
+
+
+        $fotosDenuncia =FotoDenuncia::where('denuncia_id',$denuncia_id)->get();
+
+        $cliente = new RekognitionClient([
+            'region' => env('AWS_DEFAULT_REGION'),
+            'version' =>'latest'
+        ]);
+
+
+            if($request->hasFile('imagen1')){
+
+                 $imagen1 = $request->file('imagen1');
+                 $fotoCloud1 =Cloudinary::upload($imagen1->getRealPath(),['folders'=>'fotografos']);
+                 $public_id_imagen1=$fotoCloud1->getPublicId();
+                 $url1 =$fotoCloud1->getSecurePath();
+
+                 if($request->hasFile('imagen2')){
+
+                    
+                        $imagen2 = $request->file('imagen2');
+                        $fotoCloud2 =Cloudinary::upload($imagen2->getRealPath(),['folders'=>'fotografos']);
+                        $public_id_imagen2=$fotoCloud2->getPublicId();
+                        $url2 =$fotoCloud2->getSecurePath();
+
+                        $result = $cliente->detectLabels([
+                            'Image' => [
+                                'Bytes' => file_get_contents($url1),
+                            ],
+                            'MaxLabels' => 15,
+                            'MinConfidence' => 80,
+                        ]);
+
+                        $result = $result['Labels'];
+                        $datos =[];
+                        $i=0;
+                        foreach($result as $res){
+                            $datos[$i] =$res['Name']; /// AQUI ESTAN LAS ETIQUETAS DE LA IA EN FOTOS
+                            $i++;
+                        }
+
+                        $descripciones = Label::where('tipo_denuncia',$tipo_denuncia)->get(); //DATOS PARA COMPARAR CON LA IA
+                        $contiene = False;
+                        foreach($descripciones as $descrip){
+                                    if(in_array($descrip->label,$datos)){
+                                        $contiene = True;
+                                        break;
+                                    }
+                        }
+
+                           if($contiene){
+
+                            $result = $cliente->detectLabels([  // aqui se analiza la imagen2
+                                'Image' => [
+                                    'Bytes' => file_get_contents($url2),
+                                ],
+                                'MaxLabels' => 15,
+                                'MinConfidence' => 80,
+                            ]);
+
+                            $result = $result['Labels'];
+                            $datos =[];
+                            $i=0;
+                            foreach($result as $res){
+                                $datos[$i] =$res['Name']; /// AQUI ESTAN LAS ETIQUETAS DE LA IA EN FOTOS
+                                $i++;
+                            }
+
+                            $descripciones = Label::where('tipo_denuncia',$tipo_denuncia)->get(); //DATOS PARA COMPARAR CON LA IA
+                            $contiene = False;
+                            foreach($descripciones as $descrip){
+                                        if(in_array($descrip->label,$datos)){
+                                            $contiene = True;
+                                            break;
+                                        }
+                            }
+
+                                if($contiene){
+                                    if($this->analizarDescripcion($request['descripcion'])=="F"){
+                                        $datosHash = hash('sha1',$request['descripcion'].''.$request['tipo_denuncia']);
+                                                $denuncia->update([
+                                                'titulo' =>$titulo,
+                                                'descripcion' => $descripcion,
+                                                'latitud' => $latitud,
+                                                'longitud' =>$longitud,
+                                                'tipo_denuncia' =>$tipo_denuncia,
+                                                'fecha' => $fecha,
+                                                'hora' => $hora,
+                                                'user_id' => $user_id->id,
+                                                'hash' => $datosHash,
+                                            ]);
+    
+                                       
+                                        foreach($fotosDenuncia as $fotoActual){
+                                            $fotoActual->url=$url1;
+                                            $fotoActual->id_url=5641;
+                                            $fotoActual->save();
+                                            $url1=$url2;
+                                            
+                                        }
+    
+                                        return response()->json([
+                                            'res' => True,
+                                            'labels' => 'Denuncia Actualizada Con Exito',
+                                        
+                                        ]);
+                                    } 
+    
+                                    return response()->json([
+                                        'res' => False,
+                                        'labels' => 'Descripcion es ofensiva',
+                                    
+                                    ]);
+                                }
+                        }
+
+                        return response()->json([
+                            'res'=> False,
+                            'mensaje' => 'Las Fotos son acorde a la denuncia',
+                        ]);
+
+
+
+                 }
+
+                 // AQUI SOLO HAY IMAGEN1 NO TIENE IMAGEN 2 
+
+                 $result = $cliente->detectLabels([
+                    'Image' => [
+                        'Bytes' => file_get_contents($url1),
+                    ],
+                    'MaxLabels' => 15,
+                    'MinConfidence' => 80,
+                    ]);
+
+                    $result = $result['Labels'];
+                    $datos =[];
+                    $i=0;
+                    foreach($result as $res){
+                        $datos[$i] =$res['Name']; /// AQUI ESTAN LAS ETIQUETAS DE LA IA EN FOTOS
+                        $i++;
+                    }
+
+                    $descripciones = Label::where('tipo_denuncia',$tipo_denuncia)->get(); //DATOS PARA COMPARAR CON LA IA
+                    $contiene = False;
+                    foreach($descripciones as $descrip){
+                                if(in_array($descrip->label,$datos)){
+                                    $contiene = True;
+                                    break;
+                                }
+                    }
+
+                    if($contiene){
+                        if($this->analizarDescripcion($request['descripcion'])=='F'){
+                            $datosHash = hash('sha1',$request['descripcion'].''.$request['tipo_denuncia']);
+                                $denuncia->update([
+                                'titulo' =>$titulo,
+                                'descripcion' => $descripcion,
+                                'latitud' => $latitud,
+                                'longitud' =>$longitud,
+                                'tipo_denuncia' =>$tipo_denuncia,
+                                'fecha' => $fecha,
+                                'hora' => $hora,
+                                'user_id' => $user_id->id,
+                                'hash' => $datosHash,
+                            ]);
+
+                            $fotosDenuncia->update([
+                                'url'=> $url1,
+                                'id_url' =>5312,
+                            ]);
+
+                            return response()->json([
+                                'res' => True,
+                                'mensaje' => 'Denuncia Actualizada Con exito',
+                            ]);
+
+                        }
+                    
+                        return response()->json([
+                            'res' => False,
+                            'mensaje'=>'La Descripcion es Ofensiva'
+                        ]);
+
+                    }
+
+                        return response()->json([
+                            'res' => False,
+                            'mensaje'=>'Imagen No corresponde al Denuncia',
+                        ]);
+            }
+        
+        
+            return response()->json([
+                    'res' => False,
+                    'mensaje' => 'Denuncia sin imagenes',
+            ]);
+    
+
+    }
+
+
+    /*public function update(Request $request)
     {
         $titulo = $request['titulo'];
         $descripcion =$request['descripcion'];
@@ -608,7 +858,6 @@ class DenunciasController extends Controller
         $latitud = $request['latitud'];
         $longitud = $request['longitud'];
         $email =$request['email'];
-        //$user = auth()->user();
         $user =User::where('email',$email)->first();
         $denuncia = Denuncia::where('id',$denuncia_id)->where('user_id',$user->id)->first();
         $fotosDenuncia =FotoDenuncia::where('denuncia_id',$denuncia_id)->get();
@@ -618,19 +867,19 @@ class DenunciasController extends Controller
             'version' =>'latest'
         ]);
         
-            if(!$request->hasFile('imagen1')){
+            if($request->hasFile('imagen1')){
 
                 $imagen1 = $request->file('imagen1');
-                $imagen1 = public_path('aaaaa.jpg');
-                 $fotoCloud1 =Cloudinary::upload($imagen1,['folders'=>'fotografos']);
+                
+                 $fotoCloud1 =Cloudinary::upload($imagen1->getRealPath(),['folders'=>'fotografos']);
                  $public_id_imagen1=$fotoCloud1->getPublicId();
                  $url1 =$fotoCloud1->getSecurePath();
 
-                if(!$request->hasFile('imagen2')){
+                if($request->hasFile('imagen2')){
 
                     $imagen2 = $request->file('imagen2');
-                    $imagen2 = public_path('aaaaa.jpg');
-                    $fotoCloud2 =Cloudinary::upload($imagen2,['folders'=>'fotografos']);
+                    
+                    $fotoCloud2 =Cloudinary::upload($imagen2->getRealPath(),['folders'=>'fotografos']);
                     $public_id_imagen2=$fotoCloud2->getPublicId();
                     $url2 =$fotoCloud2->getSecurePath();
 
@@ -811,7 +1060,7 @@ class DenunciasController extends Controller
                 'res' => False,
                 'mensaje' =>'Inserte imagenes de la denuncia',
             ]);
-    }
+    }*/
 
     /**
      * Remove the specified resource from storage.
