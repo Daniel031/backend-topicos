@@ -22,6 +22,9 @@ class ComprobarRostroController extends Controller
 
     public function comparar(Request $request){
 
+
+        
+
         $fotoSegip = Segip::where('ci','=',$request['ci'])->get()->first();
         
 
