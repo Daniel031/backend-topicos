@@ -64,6 +64,9 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
 });
 
 
+Route::get('/users-filtros',[DenunciasController::class,'filtrar']);
+
+
 Route::post('/users-actualizar',[DenunciasController::class,'update']);
 
 Route::post('/users-eliminar',[DenunciasController::class,'destroy']);
