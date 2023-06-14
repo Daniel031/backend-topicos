@@ -21,7 +21,7 @@ return new class extends Migration
             $table->dateTime('ultimo_inicio_sesion')->nullable();
             $table->unsignedSmallInteger('intentos')->default(0);
             $table->boolean('estado')->default(1);
-            $table->bigInteger('codigo_verificacion');
+            $table->bigInteger('codigo_verificacion')->nullable();
             $table->dateTime('fecha_desbloqueo')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
