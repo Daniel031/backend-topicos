@@ -320,12 +320,12 @@ return [
         ],
         ['header' => 'account_settings'],
         [
-            'text' => 'profile',
+            'text' => 'Mapa de denuncias',
             'url'  => 'admin/settings',
             'icon' => 'fas fa-fw fa-user',
         ],
         [
-            'text' => 'change_password',
+            'text' => 'no funka',
             'url'  => 'admin/settings',
             'icon' => 'fas fa-fw fa-lock',
         ],
