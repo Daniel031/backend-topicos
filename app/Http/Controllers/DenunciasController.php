@@ -400,7 +400,7 @@ class DenunciasController extends Controller
 
     public function index()
     {
-        $denuncias = Denuncia::where('user_id',"=","3")->get();
+        $denuncias = Denuncia::get();
         return response()->json([
             'datos'=> $denuncias,
         ]);

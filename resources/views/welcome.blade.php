@@ -6,7 +6,20 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     {{-- <link rel="stylesheet" href="css/style.css"> --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    
     <script src="https://kit.fontawesome.com/3660a3dc6d.js" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
+
+    
+    <style>
+      #map { height: 600px;
+            width:80%;
+            margin:20px auto;
+      }
+    </style>
     <title>Document</title>
 </head>
 <body>
@@ -27,8 +40,8 @@
               <div class="col-sm">
                 
               </div>
-              <div class="col-sm">
-                <h1 style="margin-bottom:30px"><strong> Mapa de denuncias</strong></h1>
+              <div class="title">
+                <h1 style="margin-bottom:30px m-auto"><strong> Mapa de denuncias</strong></h1>
               </div>
               <div class="col-sm">
                 
@@ -158,11 +171,152 @@
     </form>
 
 
-    <div class="map">
+    <div id="map">
 
     </div>
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> 
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""></script>
+
+    {{-- -17.782274492638184, -63.180231223785405 --}}
+    <script>
+            var map = L.map('map').setView([-17.782274492638184, -63.180231223785405], 12);
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+              maxZoom: 20,
+              attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
+
+
+            // var marker = L.marker([-17.782274492638184, -63.180231223785405]).addTo(map);
+
+
+            fetch('http://127.0.0.1:8000/api/index')
+            .then(response =>response.json().then( value=>{
+              let denuncias = value.datos;
+              //console.log(denuncias);
+              denuncias.forEach(element => {
+                dato = element['tipo_denuncia'];
+
+                if(dato == '1'){
+                  let circle = L.circle([element['latitud'], element['longitud']], {
+                          color: 'blue',
+                          fillColor: 'blue',
+                          fillOpacity: 0.5,
+                          radius: 50
+                      }).addTo(map);
+
+                }
+                if(dato == '2'){
+                  let circle = L.circle([element['latitud'], element['longitud']], {
+                          color: 'red',
+                          fillColor: 'red',
+                          fillOpacity: 0.5,
+                          radius: 50
+                      }).addTo(map);
+
+                }
+                if(dato =='3'){
+
+                  let circle = L.circle([element['latitud'], element['longitud']], {
+                          color: 'green',
+                          fillColor: 'green',
+                          fillOpacity: 0.5,
+                          radius: 50
+                      }).addTo(map);
+                }
+
+                if(dato =='4'){
+                  let circle = L.circle([element['latitud'], element['longitud']], {
+                          color: 'black',
+                          fillColor: 'black',
+                          fillOpacity: 0.5,
+                          radius: 50
+                      }).addTo(map);
+
+                }
+                if(dato =="5"){
+                  let circle = L.circle([element['latitud'], element['longitud']], {
+                          color: 'purple',
+                          fillColor: 'purple',
+                          fillOpacity: 0.7,
+                          radius: 50
+                      }).addTo(map);
+
+                }
+                  // switch(dato){
+                  //     // console.log(element['tipo_denuncias']);
+                  //   case "1":{
+                  //     var circle = L.circle([element['latitud'], element['longitud']], {
+                  //         color: 'blue',
+                  //         fillColor: '#f03',
+                  //         fillOpacity: 0.5,
+                  //         radius: 5
+                  //     }).addTo(map);
+                  //     break;
+                  //   }
+                  //   case "2":{
+                  //     var circle = L.circle([element['latitud'], element['longitud']], {
+                  //         color: 'red',
+                  //         fillColor: '#f03',
+                  //         fillOpacity: 0.5,
+                  //         radius: 5
+                  //     }).addTo(map);
+                  //     break;
+
+                  //   }
+                  //   case "3":{
+                  //     var circle = L.circle([element['latitud'], element['longitud']], {
+                  //         color: 'green',
+                  //         fillColor: '#f03',
+                  //         fillOpacity: 0.5,
+                  //         radius: 5
+                  //     }).addTo(map);
+                  //     break;
+                  //   }
+                  //   case "4":{
+                  //     var circle = L.circle([element['latitud'], element['longitud']], {
+                  //         color: 'yellow',
+                  //         fillColor: '#f03',
+                  //         fillOpacity: 0.5,
+                  //         radius: 5
+                  //     }).addTo(map);
+                  //     break;
+                  //   }
+                  //   case "5":{
+                  //     var circle = L.circle([element['latitud'], element['longitud']], {
+                  //         color: 'black',
+                  //         fillColor: '#f03',
+                  //         fillOpacity: 0.5,
+                  //         radius: 5
+                  //     }).addTo(map);
+                  //     break;
+
+                  //   }
+
+                  // }
+                  // console.log(element['latitud']);
+                  // console.log(element['longitud']);
+                  // console.log("------------------------");
+              });
+            })).catch((error)=>{
+
+                console.log(error);
+
+            });
+
+
+          // response.json().then( value=>{
+          //   console.log(value.datos)
+          // }).catch(
+          //   error=>{
+          // });
+            
+
+            
+    </script>
 </body>
 </html>
