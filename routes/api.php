@@ -26,6 +26,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 /** RUTAS DE REGISTROS "LOGIN" PARA LOS USUARIOS  */
 
 Route::post('/users',[RegistroController::class,'registrar']); // se crean sus datos en la base de datos
+Route::post('/users-emailVerify',[RegistroController::class,'sendEmailConfirmation']); // envia un correo de confirmacion a un usuario
 Route::post('/users-login',[RegistroController::class,'login']); // se loguea el user
 
 Route::post('/users-comprobacion',[ComprobarRostroController::class,'comparar']); // se envia la foto para aws
@@ -37,7 +38,7 @@ Route::post('/users-actualizarContraseña',[RegistroController::class,'actualiza
 
 //ruta post que escribio jose luis padilla
 Route::post('/users-codigoVerificacionEmail',[VerificarEmailController::class,'VerificarCodigoEmail']);
-
+Route::post('/users-emailNoRegistrado',[VerificarEmailController::class,'EmailNoRegistrado']);
 //ruta post que escribio jose luis padilla para recibir las denuncias y analizar su data
 Route::post('/users-denunciar',[DenunciasController::class,'denunciar']);
 
