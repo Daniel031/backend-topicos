@@ -65,6 +65,29 @@ class VerificarEmailController extends Controller
 
     }
 
+    public function emailNoRegistrado(Request $request) {
+        $email = $request['email'];
+        $user = User::where('email', $request['email'])->first();
+        if ($user) {
+            if ($user->email_verified_at) {
+                return response()->json([
+                    'res' => false,
+                    'mensaje' => 'El usuario ya se encuentra registrado'
+                ],409);
+            }else{
+                return response()->json([
+                    'res' => true,
+                    'mensaje' => 'El usuario necesita verificar su correo'
+                ],200);
+            }
+        } else {
+            return response()->json([
+                'res' => false,
+                'mensaje' => 'El usuario no se encuentra registrado'
+            ],400);
+        }
+    }
+
     //metodo que escribio jose luis padilla
     public function VerificarCodigoEmail(Request $request){
 

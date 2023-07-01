@@ -22,15 +22,21 @@ class RegistroController extends Controller
 
     public function registrar(RegistrarRequest $request){
         $email = $request['email'];
-        $codigo=  rand(100000,999999);
+        $email = $request['email'];
+        $user = User::where('email', $request['email'])->first();
+        if ($user) {
+                return response()->json([
+                    'res' => false,
+                    'mensaje' => 'El usuario ya se encuentra registrado'
+                ],200);
+        }
 
 
         $user = User::create([
             'name' => $request['name'],
             'email' => $request['email'],
             'password' =>bcrypt($request['password']),
-            'ultimo_cambio_password' => Carbon::now(),
-            'codigo_verificacion' =>$codigo,
+            'ultimo_cambio_password' => Carbon::now()
         ]);
 
         $contraseña = Contraseña::create([
@@ -39,6 +45,34 @@ class RegistroController extends Controller
             'user_id'=>$user->id,
         ]);
 
+        return response()->json([
+            'res' => true,
+            'mensaje' => 'Usuario Creado con Exito',
+            'status' => 200,
+             
+        ],200);
+
+
+}
+    public function sendEmailConfirmation(Request $request) {
+        $email = $request['email'];
+        $codigo=  rand(100000,999999);
+        $user = User::where('email',$request['email'])->first();
+        if (!$user) {            
+            return response()->json([
+                'res' => false,
+                'mensaje' => 'El usuario no se encuentra registrado'
+            ],400);
+        }else{
+            if ($user->email_verified_at) {
+                return response()->json([
+                    'res' => false,
+                    'mensaje' => 'El usuario ya se encuentra registrado'
+                ],400);   
+            }
+        }
+        $user->codigo_verificacion = $codigo;
+        $user->save();
         $mail = new PHPMailer(true);
 
         try {
@@ -58,6 +92,11 @@ class RegistroController extends Controller
             $mail->Body    = "Su codigo de verificacion es para el sistema de Denuncias es :  ". $codigo;
             $mail->send();
 
+            return response()->json([
+                'res' => true,
+                'mensaje' => 'Se envio el codigo correctamente'
+            ],200);
+
         } catch (Exception $e) {
 
             return response()->json([
@@ -67,25 +106,19 @@ class RegistroController extends Controller
             ],500);
     
         }
-
-        return response()->json([
-            'res' => true,
-            'mensaje' => 'Usuario Creado con Exito',
-            'status' => 200,
-             
-        ],200);
-
-
-}
-
-       
-
+    }
 
     public function login(LoginRequest $request){
         
         $user = User::where('email',$request['email'])->first();
         
         if($user){
+            if (!$user->email_verified_at) {
+                return response()->json([
+                    'res' => false,
+                    'mensaje' => 'El usuario necesita verificar su correo'
+                ],400);
+            }
             if($user->fecha_desbloqueo){
                 $fechaActual = Carbon::now();
                 $minutos = $fechaActual->diffInMinutes($user->fecha_desbloqueo);

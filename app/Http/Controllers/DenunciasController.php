@@ -30,7 +30,7 @@ class DenunciasController extends Controller
     public function denunciar(Request $request){
         $titulo =$request['titulo'];
         $descripcion = $request['descripcion'];
-        $fecha = date("m.d.y"); 
+        $fecha = Carbon::now(); 
         $hora = date("H:i:s");
         $latitud = $request['latitud'];
         $longitud = $request['longitud'];
@@ -651,7 +651,7 @@ class DenunciasController extends Controller
      */
     public function destroy(Request $request)
     {
-        $user = auth()->user()->id;
+        //$user = auth()->user()->id;
         $denuncia_id =$request['denuncia_id'];
         $denuncia =Denuncia::find($denuncia_id);
         if($denuncia){
