@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->date('ultimo_cambio_password')->nullable();
+            $table->boolean('administrativo')->default('0');
+            $table->bigInteger('area_id')->nullable();
             $table->dateTime('creacion_token')->nullable();
             $table->dateTime('ultimo_inicio_sesion')->nullable();
             $table->unsignedSmallInteger('intentos')->default(0);

@@ -308,7 +308,7 @@ return [
         ],
         [
             'text' => 'blog',
-            'url'  => 'admin/blog',
+            'route'  => 'administrativos.index',
             'can'  => 'manage-blog',
         ],
         [
@@ -326,7 +326,7 @@ return [
         ],
         [
             'text' => 'no funka',
-            'url'  => 'admin/settings',
+            'route'  => 'tipos_denuncias.create',
             'icon' => 'fas fa-fw fa-lock',
         ],
         [

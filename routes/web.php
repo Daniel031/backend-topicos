@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AreasController;
+use App\Http\Controllers\TipoDenunciaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +23,47 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+Route::prefix('administrativo')->name('administrativos.')->middleware(['auth'])->group(function(){
+
+    
+    Route::get('/indexAdmin',[UserController::class,'index'])->name('index');
+    Route::get('/showAdmin/{admin}',[UserController::class,'show'])->name('show');
+    Route::get('createAdmin',[UserController::class,'create'])->name('create');
+    Route::post('storeAdmin',[UserController::class,'store'])->name('store');
+    Route::get('editAdmin/{admin}',[UserController::class,'edit'])->name('edit');
+    Route::post('updateAdmin/{admin}',[UserController::class,'udpate'])->name('update');
+    Route::delete('deleteAdmin/{admin}',[UserController::class,'destroy'])->name('destroy');
+
+
+});
+
+
+Route::prefix('area')->name('areas.')->middleware(['auth'])->group(function(){
+
+    Route::get('/indexArea',[AreasController::class,'index'])->name('index');
+    Route::get('/showArea/{area}',[AreasController::class,'show'])->name('show');
+    Route::get('/createArea',[AreasController::class,'create'])->name('create');
+    Route::post('/storeArea',[AreasController::class,'store'])->name('store');
+    Route::get('/editArea/{area}',[AreasController::class,'edit'])->name('edit');
+    Route::post('/updateArea',[AreasController::class,'udpate'])->name('update');
+    Route::delete('/deleteArea/{area}',[AreasController::class,'destroy'])->name('destroy');
+
+
+});
+
+
+
+Route::prefix('tipo_denuncia')->name('tipos_denuncias.')->middleware(['auth'])->group(function(){
+
+    Route::get('/indexTipoDenuncia',[TipoDenunciaController::class,'index'])->name('index');
+    Route::get('/showTipoDenuncia/{tipoDenuncia}',[TipoDenunciaController::class,'show'])->name('show');
+    Route::get('/createTipoDenuncia',[TipoDenunciaController::class,'create'])->name('create');
+    Route::post('/storeTipoDenuncia',[TipoDenunciaController::class,'store'])->name('store');
+    Route::get('/editTipoDenuncia/{tipoDenuncia}',[TipoDenunciaController::class,'edit'])->name('edit');
+    Route::post('/updateTipoDenuncia',[TipoDenunciaController::class,'udpate'])->name('update');
+    Route::delete('/deleteTipoDenuncia/{tipoDenuncia}',[TipoDenunciaController::class,'destroy'])->name('destroy');
+
+
+});
