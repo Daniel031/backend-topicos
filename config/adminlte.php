@@ -326,7 +326,7 @@ return [
         ],
         [
             'text' => 'no funka',
-            'route'  => 'tipos_denuncias.create',
+            'route'  => 'buzon.mapa',
             'icon' => 'fas fa-fw fa-lock',
         ],
         [

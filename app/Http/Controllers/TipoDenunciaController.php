@@ -33,12 +33,12 @@ class TipoDenunciaController extends Controller
     public function store(Request $request)
     {
             $tipo = TipoDenuncia::create([
-                'nombre' => $request['nombre'];
+                'nombre' => $request['nombre'],
                 'descripcion'=>$request['descripcion'],
                 'area_id' => $request['area_id'],
             ]);
 
-            return back();
+            return redirect()->route('tipos_denuncias.index');
     }
 
     /**
@@ -46,7 +46,8 @@ class TipoDenunciaController extends Controller
      */
     public function show(TipoDenuncia $tipoDenuncia)
     {
-        return view('tipos_denuncias.show-tipo_denuncia',compact('tipoDenuncia'));
+        $areas = Area::get();
+        return view('tipos_denuncias.show-tipo_denuncia',compact('tipoDenuncia','areas'));
 
 
     }
@@ -65,8 +66,12 @@ class TipoDenunciaController extends Controller
      */
     public function update(Request $request, TipoDenuncia $tipoDenuncia)
     {
-            $tipoDenuncia->update($request->all());
-            return view('tipos_denuncias.main-tipo_denuncia');
+            $tipoDenuncia->nombre=$request['nombre'];
+            $tipoDenuncia->descripcion=$request['descripcion'];
+            $tipoDenuncia->estado=$request['estado'];
+            $tipoDenuncia->area_id=$request['area_id'];
+            $tipoDenuncia->save();
+            return redirect()->route('tipos_denuncias.index');
     }
 
     /**
@@ -74,9 +79,9 @@ class TipoDenunciaController extends Controller
      */
     public function destroy(TipoDenuncia $tipoDenuncia)
     {
-        $tipoDenuncia->update([
-            'estado' => 0,
-        ]);
-        return view('tipos_denuncias.main-tipo_denuncia');
+        $tipoDenuncia->estado=0;
+        $tipoDenuncia->save();
+
+        return redirect()->route('tipos_denuncias.index');
     }
 }

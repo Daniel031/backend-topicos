@@ -23,6 +23,7 @@ class AreasController extends Controller
      */
     public function create()
     {
+        
         return view('areas.create-areas');
     }
 
@@ -31,15 +32,13 @@ class AreasController extends Controller
      */
     public function store(Request $request)
     {
-            // $tipos_denuncias = $request('tipos_denuncia');
             $area = Area::create([
                 'nombre'=>$request['nombre'],
                 'descripcion'=>$request['descripcion'],
             ]);
 
-            // foreach($i=0;i<count($tipos_denuncias);$i++){
-            // }
-        return view('areas.main-areas');
+            
+        return redirect()->route('areas.index');
     }
 
     /**
@@ -55,6 +54,7 @@ class AreasController extends Controller
      */
     public function edit(Area $area)
     {
+
         return view('areas.edit-areas',compact('area'));  
     }
 
@@ -64,8 +64,12 @@ class AreasController extends Controller
     public function update(Request $request)
     {
         $area = Area::find($request['id_area'])->first();
-        $area->update($request->all());
-        return view('areas.main-areas');
+        $area->nombre=$request['nombre'];
+        $area->descripcion=$request['descripcion'];
+        $area->estado=$request['estado'];
+        $area->save();
+
+        return redirect()->route('areas.index');
     }
 
     /**
@@ -73,9 +77,8 @@ class AreasController extends Controller
      */
     public function destroy(Area $area)
     {
-        $area->update([
-            'estado'=>0,
-        ]);
-        return view('areas.main-areas');
+        $area->estado=0;
+        $area-save();
+        return redirect()->route('areas.index');
     }
 }

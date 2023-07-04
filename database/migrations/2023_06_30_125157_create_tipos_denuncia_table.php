@@ -16,8 +16,10 @@ return new class extends Migration
             $table->String('nombre');
             $table->String('descripcion')->nullable();
             $table->boolean('estado')->default(1);
-            $table->foreignId('area_id')->constrained(table:'areas')->nullable();
+            //$table->foreignId('area_id')->constrained(table:'areas')->nullable();
+            $table->unsignedBigInteger('area_id')->nullable(); 
             $table->timestamps();
+            $table->foreign('area_id')->references('id')->on('areas');
         });
     }
 

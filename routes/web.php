@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AreasController;
 use App\Http\Controllers\TipoDenunciaController;
+use App\Http\Controllers\BuzonController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,8 +34,9 @@ Route::prefix('administrativo')->name('administrativos.')->middleware(['auth'])-
     Route::get('createAdmin',[UserController::class,'create'])->name('create');
     Route::post('storeAdmin',[UserController::class,'store'])->name('store');
     Route::get('editAdmin/{admin}',[UserController::class,'edit'])->name('edit');
-    Route::post('updateAdmin/{admin}',[UserController::class,'udpate'])->name('update');
+    Route::post('updateAdmin/{admin}',[UserController::class,'update'])->name('update');
     Route::delete('deleteAdmin/{admin}',[UserController::class,'destroy'])->name('destroy');
+    Route::get('/denunciasAdmin',[UserController::class,'misDenuncias'])->name('misDenuncias');
 
 
 });
@@ -47,7 +49,7 @@ Route::prefix('area')->name('areas.')->middleware(['auth'])->group(function(){
     Route::get('/createArea',[AreasController::class,'create'])->name('create');
     Route::post('/storeArea',[AreasController::class,'store'])->name('store');
     Route::get('/editArea/{area}',[AreasController::class,'edit'])->name('edit');
-    Route::post('/updateArea',[AreasController::class,'udpate'])->name('update');
+    Route::post('/updateArea',[AreasController::class,'update'])->name('update');
     Route::delete('/deleteArea/{area}',[AreasController::class,'destroy'])->name('destroy');
 
 
@@ -62,8 +64,24 @@ Route::prefix('tipo_denuncia')->name('tipos_denuncias.')->middleware(['auth'])->
     Route::get('/createTipoDenuncia',[TipoDenunciaController::class,'create'])->name('create');
     Route::post('/storeTipoDenuncia',[TipoDenunciaController::class,'store'])->name('store');
     Route::get('/editTipoDenuncia/{tipoDenuncia}',[TipoDenunciaController::class,'edit'])->name('edit');
-    Route::post('/updateTipoDenuncia',[TipoDenunciaController::class,'udpate'])->name('update');
+    Route::post('/updateTipoDenuncia',[TipoDenunciaController::class,'update'])->name('update');
     Route::delete('/deleteTipoDenuncia/{tipoDenuncia}',[TipoDenunciaController::class,'destroy'])->name('destroy');
+
+
+});
+
+Route::prefix('buzon')->name('buzon.')->middleware(['auth'])->group(function(){
+
+    Route::get('/indexBuzonDenuncias',[BuzonController::class,'index'])->name('index');
+    Route::get('/showDenuncia/{denuncia}',[BuzonController::class,'show'])->name('show');
+    // Route::get('/createTipoDenuncia',[TipoDenunciaController::class,'create'])->name('create');
+    // Route::post('/storeTipoDenuncia',[TipoDenunciaController::class,'store'])->name('store');
+    // Route::get('/editTipoDenuncia/{tipoDenuncia}',[TipoDenunciaController::class,'edit'])->name('edit');
+    Route::post('/updateDenuncia/{denuncia}',[BuzonController::class,'update'])->name('update');
+    // Route::delete('/deleteTipoDenuncia/{tipoDenuncia}',[TipoDenunciaController::class,'destroy'])->name('destroy');
+
+
+    Route::get('/mapaDenuncias',[BuzonController::class,'mapas'])->name('mapa');
 
 
 });

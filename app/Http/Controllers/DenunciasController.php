@@ -12,6 +12,9 @@ use App\Models\Label;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
+use App\Models\TipoDenuncia;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Collection;
 
 
 use App\Helpers\OpenAIChat;
@@ -680,5 +683,37 @@ class DenunciasController extends Controller
         
        
     }
+
+
+
+    
+
+    public function filtrarUser(){
+        $miArea =  auth()->user()->area_id;
+        $areas=TipoDenuncia::where('area_id','=',$miArea)->get();   // tipos de areas del usuario
+        $datos=[];
+        $i=0;
+        $pedidos = new Collection([]);
+
+        foreach($areas as $area){
+            $pedidos = DB::table('denuncias')
+                ->join('tipos_denuncia','tipos_denuncia.id' , '=', 'denuncias.tipo_denuncia')
+                ->where('denuncias.tipo_denuncia', $area->id)
+                ->select('denuncias.*')->get();
+                if($pedidos){
+                    $datos[$i]=$pedidos;
+                    $i=$i+1;
+                }
+
+        }
+        
+        return response()->json([
+            'datos'=>$datos[0]
+        ]);
+
+
+    }
+
+   
 
 }
