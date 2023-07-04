@@ -68,7 +68,6 @@ class TipoDenunciaController extends Controller
     {
             $tipoDenuncia->nombre=$request['nombre'];
             $tipoDenuncia->descripcion=$request['descripcion'];
-            $tipoDenuncia->estado=$request['estado'];
             $tipoDenuncia->area_id=$request['area_id'];
             $tipoDenuncia->save();
             return redirect()->route('tipos_denuncias.index');
@@ -79,7 +78,7 @@ class TipoDenunciaController extends Controller
      */
     public function destroy(TipoDenuncia $tipoDenuncia)
     {
-        $tipoDenuncia->estado=0;
+        $tipoDenuncia->estado=!$tipoDenuncia->estado;
         $tipoDenuncia->save();
 
         return redirect()->route('tipos_denuncias.index');

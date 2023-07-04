@@ -320,13 +320,24 @@ return [
         ],
         ['header' => 'account_settings'],
         [
-            'text' => 'Mapa de denuncias',
-            'url'  => 'admin/settings',
+            'text' => 'Usuarios',
+            'route'  => "administrativos.index",
             'icon' => 'fas fa-fw fa-user',
         ],
         [
+            'text' => 'Tipo de denuncias',
+            'route'  => 'tipos_denuncias.index',
+            'icon' => 'fas fa-chart-area',
+        ],
+        [
+            'text' => 'Areas de denuncia',
+            'route'  => 'areas.index',
+            'icon' => 'fas fa-layer-group',
+        ],
+        [
+            'isset' => '$variable',
             'text' => 'no funka',
-            'route'  => 'buzon.mapa',
+            'route'  => 'tipos_denuncias.create',
             'icon' => 'fas fa-fw fa-lock',
         ],
         [

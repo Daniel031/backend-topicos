@@ -46,7 +46,7 @@ class AreasController extends Controller
      */
     public function show(Area $area)
     {
-        return view('areas.show-areas',$area);
+        return view('areas.show-areas',compact('area'));
     }
 
     /**
@@ -61,12 +61,12 @@ class AreasController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
+    public function update(Request $request, Area $area)
     {
-        $area = Area::find($request['id_area'])->first();
+        //$area = Area::find($request['id_area'])->first();
         $area->nombre=$request['nombre'];
         $area->descripcion=$request['descripcion'];
-        $area->estado=$request['estado'];
+        $area->estado=$request['estado']?0:1;
         $area->save();
 
         return redirect()->route('areas.index');
@@ -77,8 +77,8 @@ class AreasController extends Controller
      */
     public function destroy(Area $area)
     {
-        $area->estado=0;
-        $area-save();
+        $area->estado=$area->estado?0:1;
+        $area->save();
         return redirect()->route('areas.index');
     }
 }

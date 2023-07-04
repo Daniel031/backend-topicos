@@ -1,15 +1,57 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-    <h1>
-        AQUI SE MUESTRA LA EL TIPO DE DENUNCIA QUE SE DA CLICK ALLA EN LA VISTA MAIN-TIPO_DENUNCIAS
-        EL PARAMETRO ES PASADO DESDE EL BACKEND
-    </h1>
-</body>
-</html>
+@extends('adminlte::page')
+
+@section('title', 'Tipo Denuncias')
+
+@section('content_header')
+    <h1>Tipos de denuncias</h1>
+@stop
+
+@section('content')
+
+<div class="title">
+Nombre
+</div>
+<div class="contain">
+ {{$tipoDenuncia->nombre}}
+</div>
+<div class="title">
+    Descripci&oacute;n
+</div>
+<div class="contain">
+    {{$tipoDenuncia->descripcion}}
+</div>
+<div class="title">
+    Area
+</div>
+<div class="contain">
+    @if (!$tipoDenuncia->area_id)
+        Sin definir
+    @else
+     {{$areas->where('id',$tipoDenuncia->area_id)->first()->nombre}} 
+    @endif
+
+</div>
+
+<div class="acciones">
+    <a class="btn btn-primary" href="{{route('tipos_denuncias.edit',$tipoDenuncia)}}">Editar</a>
+    <a class="btn btn-secondary" href="{{route('tipos_denuncias.index')}}">Atras</a>
+</div>
+@stop
+
+@section('css')
+
+<style>
+    .title {
+        font-weight: bold
+    }
+    .acciones {
+        margin-top: 10px
+    }
+</style>
+
+@stop
+
+@section('js')
+
+
+@stop

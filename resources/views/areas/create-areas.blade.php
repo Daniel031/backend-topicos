@@ -1,17 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-        <h1>AQUI VA LA CREACION DE LAS AREAS O DEPARTAMENTO</h1>
-            <ul>
-                <h2>REQUIERO</h2>
-                <li>NOMBRE</li>
-                <li>DESCRIPCION</li>
-            </ul>
-</body>
-</html>
+@extends('adminlte::page')
+
+@section('title', 'Areas Crear')
+
+@section('content_header')
+    <h1>Crear Area</h1>
+@stop
+
+@section('content')
+<form action="{{route('areas.store')}}" method="POST" >
+    @csrf
+    @method('POST')
+    <div class="form-group">
+      <label for="nombre">Nombre</label>
+      <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre de las areas">
+    </div>
+    <div class="form-group">
+      <label for="descripcion">Descripci&oacute;n</label>
+      <input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="Descripcion ">
+    </div>
+    <a class="btn btn-secondary" href="{{route('areas.index')}}">Atras</a>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+  </form>
+
+@stop
+
+@section('css')
+
+<style>
+    .denuncias {
+        margin-bottom: 10px
+    }
+</style>
+
+@stop
+
+@section('js')
+
+
+@stop

@@ -49,7 +49,7 @@ Route::prefix('area')->name('areas.')->middleware(['auth'])->group(function(){
     Route::get('/createArea',[AreasController::class,'create'])->name('create');
     Route::post('/storeArea',[AreasController::class,'store'])->name('store');
     Route::get('/editArea/{area}',[AreasController::class,'edit'])->name('edit');
-    Route::post('/updateArea',[AreasController::class,'update'])->name('update');
+    Route::post('/updateArea/{area}',[AreasController::class,'update'])->name('update');
     Route::delete('/deleteArea/{area}',[AreasController::class,'destroy'])->name('destroy');
 
 
@@ -64,7 +64,7 @@ Route::prefix('tipo_denuncia')->name('tipos_denuncias.')->middleware(['auth'])->
     Route::get('/createTipoDenuncia',[TipoDenunciaController::class,'create'])->name('create');
     Route::post('/storeTipoDenuncia',[TipoDenunciaController::class,'store'])->name('store');
     Route::get('/editTipoDenuncia/{tipoDenuncia}',[TipoDenunciaController::class,'edit'])->name('edit');
-    Route::post('/updateTipoDenuncia',[TipoDenunciaController::class,'update'])->name('update');
+    Route::post('/updateTipoDenuncia/{tipoDenuncia}',[TipoDenunciaController::class,'update'])->name('update');
     Route::delete('/deleteTipoDenuncia/{tipoDenuncia}',[TipoDenunciaController::class,'destroy'])->name('destroy');
 
 

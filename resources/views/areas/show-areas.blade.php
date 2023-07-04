@@ -1,12 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-    <h1>ES EL SHOW DE UN AREA ESPECIFICA, ALGO INÚTIL A MI PARECER</h1>
-</body>
-</html>
+@extends('adminlte::page')
+
+@section('title', 'Area')
+
+@section('content_header')
+    <h1>Area</h1>
+@stop
+
+@section('content')
+
+<div class="title">
+Nombre
+</div>
+<div class="contain">
+ {{$area->nombre}}
+</div>
+<div class="title">
+    Descripci&oacute;n
+</div>
+<div class="contain">
+    {{$area->descripcion}}
+</div>
+
+<div class="acciones">
+    <a class="btn btn-primary" href="{{route('areas.edit',$area)}}">Editar</a>
+    <a class="btn btn-secondary" href="{{route('areas.index')}}">Atras</a>
+</div>
+@stop
+
+@section('css')
+
+<style>
+    .title {
+        font-weight: bold
+    }
+    .acciones {
+        margin-top: 10px
+    }
+</style>
+
+@stop
+
+@section('js')
+
+
+@stop
