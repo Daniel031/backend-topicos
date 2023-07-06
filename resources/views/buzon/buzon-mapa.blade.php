@@ -195,7 +195,10 @@ crossorigin=""></script>
 
         });
         }
-        denunciasFiltradas();
+
+        setInterval(function() {
+          denunciasFiltradas();
+        }, 1000);
 </script>
 
 <script src="/js/index.js"></script>
