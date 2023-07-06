@@ -12,7 +12,7 @@ function onChangeSelect() {
     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
     // Realizar la petición utilizando fetch
-    fetch('http://127.0.0.1:8000/api/filtrar-denuncias', {
+    fetch(`${getApiUrl()}/api/filtrar-denuncias`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

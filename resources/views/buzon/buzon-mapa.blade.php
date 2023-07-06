@@ -120,6 +120,10 @@ crossorigin=""></script>
 
 {{-- -17.782274492638184, -63.180231223785405 --}}
 <script>
+       function getApiUrl() {
+        const url =`{{url('/')}}`;
+        return url;
+       }
         var map = L.map('map').setView([-17.782274492638184, -63.180231223785405], 12);
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
           maxZoom: 20,
@@ -131,7 +135,7 @@ crossorigin=""></script>
 
         function denunciasFiltradas() {
 
-        fetch('http://127.0.0.1:8000/api/denuncias-filtradas')
+        fetch(`${getApiUrl()}/api/denuncias-filtradas`)
         .then(response =>response.json().then( value=>{
           let denuncias = value.datos;
           //console.log(denuncias);
