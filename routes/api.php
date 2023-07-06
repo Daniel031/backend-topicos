@@ -78,8 +78,9 @@ Route::post('/users-eliminar',[DenunciasController::class,'destroy']);
 
 
 
-Route::get('/denuncias-filtradas',[DenunciasController::Class,'filtrarUser']);
 
+Route::get('/denuncias-filtradas',[DenunciasController::Class,'filtrarUser']);
+Route::post('/filtrar-denuncias',[DenunciasController::Class,'filtrarDenuncia']);
 
 
 

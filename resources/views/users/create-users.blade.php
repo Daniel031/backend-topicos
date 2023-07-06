@@ -20,7 +20,7 @@
     </div> 
     <div class="form-group">
         <label for="password">Contrase&ntilde;a</label>
-        <input type="password" class="form-control" id="password" name="password" placeholder="Contraseña" min="8">
+        <input type="password" class="form-control" id="password" name="password" placeholder="Contraseña" min="8" required>
     </div>
     <div class="form-group">
         <label for="tipo">

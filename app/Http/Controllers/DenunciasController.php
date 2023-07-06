@@ -714,6 +714,14 @@ class DenunciasController extends Controller
 
     }
 
+    public function filtrarDenuncia(Request $request) {
+        $estado = $request['estado'];
+        $fecha = $request['fecha'];
+        return response()->json([
+            'Estado' => $estado,
+            'Fecha' => $fecha 
+        ]);
+    }
    
 
 }

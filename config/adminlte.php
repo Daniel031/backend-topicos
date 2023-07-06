@@ -335,46 +335,27 @@ return [
             'icon' => 'fas fa-layer-group',
         ],
         [
+            'text' => 'Buzon de denuncias',
+            'route'  => 'buzon.index',
+            'icon' => 'fal fa-mailbox',
+        ],
+        [
             'isset' => '$variable',
             'text' => 'no funka',
             'route'  => 'tipos_denuncias.create',
             'icon' => 'fas fa-fw fa-lock',
         ],
         [
-            'text'    => 'multilevel',
+            'text'    => 'Buzon de denuncias',
             'icon'    => 'fas fa-fw fa-share',
             'submenu' => [
                 [
-                    'text' => 'level_one',
-                    'url'  => '#',
+                    'text' => 'Buzon',
+                    'route'  => 'buzon.index',
                 ],
                 [
-                    'text'    => 'level_one',
-                    'url'     => '#',
-                    'submenu' => [
-                        [
-                            'text' => 'level_two',
-                            'url'  => '#',
-                        ],
-                        [
-                            'text'    => 'level_two',
-                            'url'     => '#',
-                            'submenu' => [
-                                [
-                                    'text' => 'level_three',
-                                    'url'  => '#',
-                                ],
-                                [
-                                    'text' => 'level_three',
-                                    'url'  => '#',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-                [
-                    'text' => 'level_one',
-                    'url'  => '#',
+                    'text' => 'Mapa',
+                    'route'  => 'buzon.mapa',
                 ],
             ],
         ],

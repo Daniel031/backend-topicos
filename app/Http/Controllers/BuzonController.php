@@ -26,7 +26,7 @@ class BuzonController extends Controller
                     ->join('tipos_denuncia','tipos_denuncia.id' , '=', 'denuncias.tipo_denuncia')
                     ->where('denuncias.tipo_denuncia', $area->id)
                     ->select('denuncias.*')->get();
-                    if($pedidos){
+                    if(count($pedidos) > 0){
                         $datos[$i]=$pedidos;
                         $i=$i+1;
                     }
