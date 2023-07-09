@@ -91,15 +91,15 @@ class BuzonController extends Controller
 
     public function mapas(){
         $miArea = auth()->user()->area_id;
-            $areas=TipoDenuncia::where('area_id','=',$miArea)->get();   // tipos de areas del usuario
+            $tipos=TipoDenuncia::where('area_id','=',$miArea)->get();   // tipos de areas del usuario
             $datos=[];
             $i=0;
             $pedidos = new Collection([]);
     
-            foreach($areas as $area){
+            foreach($tipos as $tipo){
                 $pedidos = DB::table('denuncias')
                     ->join('tipos_denuncia','tipos_denuncia.id' , '=', 'denuncias.tipo_denuncia')
-                    ->where('denuncias.tipo_denuncia', $area->id)
+                    ->where('denuncias.tipo_denuncia', $tipo->id)
                     ->select('denuncias.*')->get();
                     if($pedidos){
                         $datos[$i]=$pedidos;
@@ -107,6 +107,14 @@ class BuzonController extends Controller
                     }
     
             }
+
+            // dd($datos);
+            
             return view('buzon.buzon-mapa',compact('datos'));
+    }
+
+    public function mapaPublico(){
+        return view('map');
+
     }
 }

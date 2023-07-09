@@ -10,7 +10,6 @@ function onChangeSelect() {
       fecha: valor2
     };
     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
     // Realizar la petición utilizando fetch
     fetch(`${getApiUrl()}/api/filtrar-denuncias`, {
       method: 'POST',
@@ -22,11 +21,13 @@ function onChangeSelect() {
     })
     .then(response => response.json())
     .then(data => {
-      // Manejar la respuesta del servidor
+      
+
       console.log(data);
     })
     .catch(error => {
       // Manejar errores de la petición
       //console.error(error);
     });
+
 }

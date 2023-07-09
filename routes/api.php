@@ -50,7 +50,7 @@ Route::get('/users-analizar',[DenunciasController::class,'sendMessage']);
 Route::get('/users-denuncias',[DenunciasController::class,'mostrarDenunciasUsuario']);
 
 
-Route::get('/index',[DenunciasController::class,'index']);
+Route::post('/index',[DenunciasController::class,'index']);
 // Route::middleware(['auth', 'sanctum'])->group(function () {
 
 //     Route::post('/user-logout',[RegistroContoller::class,'logout']);
@@ -76,10 +76,10 @@ Route::post('/users-eliminar',[DenunciasController::class,'destroy']);
 
 
 
-
-
-
 Route::get('/denuncias-filtradas',[DenunciasController::Class,'filtrarUser']);
+
+
+// ESTA ES RUTA DE ABAJO ES PARA LOS FILTROS POR USER
 Route::post('/filtrar-denuncias',[DenunciasController::Class,'filtrarDenuncia']);
 
 

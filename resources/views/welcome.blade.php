@@ -24,6 +24,9 @@
 		}
 		.enlace a {
 			margin-left: 2rem;
+			color:white;
+			font-size:1.4rem;
+			text-decoration: none;
 		}
 		.main {
 			display: flex;
@@ -53,13 +56,16 @@
 			font-weight: bold;
 			color: white;
 		}
+		body{
+			/* background-image:url('/m') */
+		}
     </style>
 </head>
 <body> 
     <div class="header">
 		<div class="enlace">
 			<a href="{{ route('login') }}">Iniciar Sesi&oacute;n</a>
-			<a href="{{url('/mapa')}}" >Ver Mapa</a> 
+			<a href="{{route('publico')}}" >Ver Mapa</a> 
             
 		</div>
     </div>

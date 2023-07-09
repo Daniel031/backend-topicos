@@ -48,7 +48,7 @@ class UserController extends Controller
             'estado' =>1,
         ]);
 
-        return redirec()->route('administrativos.index');
+        return redirect()->route('administrativos.index');
 
 
         

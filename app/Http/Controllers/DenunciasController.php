@@ -316,11 +316,13 @@ class DenunciasController extends Controller
             'presence_penalty' => 0.5,
             'stop' => ["11."],
             ])->json();
-            $dat = substr($datos['choices'][0]['message']['content'],0,1)==="F";
+            //$dat = substr($datos['choices'][0]['message']['content'],0,1)==="F";
             // $t ='F';
             // $re = $dat ==$t,
-
-            return response()->json(['res'=>substr($datos['choices'][0]['message']['content'],0,1),'datos' => $dat]);
+            // return response()->json([
+            //     'datos'=>$datos
+            // ]);
+            return response()->json(['res'=>substr($datos['choices'][0]['message']['content'],0,1)]);
 
     }
 
@@ -401,13 +403,61 @@ class DenunciasController extends Controller
 
 
 
-    public function index()
+    public function index(Request $request)
     {
-        $denuncias = Denuncia::get();
+        $fecha =$request['fecha'];
+        //$fecha='2';
+        $estado = $request['estado'];
+        //$estado = 0;
+        $datos = [];
+        if($fecha == '0'){          // FECHAS DE HOY DIA
+                $hoy=Carbon::now();
+                $pedidos = DB::table('denuncias')
+                    ->join('tipos_denuncia','tipos_denuncia.id' , '=', 'denuncias.tipo_denuncia')
+                    ->where('denuncias.estado','=',$estado)
+                    ->whereDate('denuncias.fecha', '=', $hoy)
+                    ->select('denuncias.*')->get();
+                    if($pedidos){
+                        $datos[0]=$pedidos;
+                    }
+            // }
+        }
+        if($fecha=='1'){            // FECHAS DE UNA SEMANA
+            $hoy=Carbon::now();
+            $pedidos = DB::table('denuncias')
+                ->join('tipos_denuncia','tipos_denuncia.id' , '=', 'denuncias.tipo_denuncia')
+                ->where('denuncias.estado','=',$estado)
+                ->whereDay('denuncias.fecha', '>=', $hoy->month-7)
+                ->select('denuncias.*')->get();
+                if($pedidos){
+                    $datos[0]=$pedidos;
+                }
+        // }
+
+        }
+        if($fecha=='2'){            // FECHAS DE MES
+                $hoy=Carbon::now();
+                $pedidos = DB::table('denuncias')
+                    ->join('tipos_denuncia','tipos_denuncia.id' , '=', 'denuncias.tipo_denuncia')
+                    ->where('denuncias.estado','=',$estado)
+                    ->whereMonth('denuncias.fecha', '>=', $hoy->month-1)
+                    ->select('denuncias.*')->get();
+                    if($pedidos){
+                        $datos[0]=$pedidos;
+                    }
+            // }
+
+        }
+
+
+
         return response()->json([
-            'datos'=> $denuncias,
+            'datos'=> $datos,
         ]);
     }
+
+
+    
 
     /**
      * Store a newly created resource in storage.
@@ -686,10 +736,13 @@ class DenunciasController extends Controller
 
 
 
+
+    // AQUI VAN TODOS LOS CAMBIOS
+
     
 
-    public function filtrarUser(){
-        $miArea =  auth()->user()->area_id;
+    public function filtrarUser(){          // este filtro es el del mapa por defecto solo para el usuario
+        $miArea = auth()->user()->area_id;
         $areas=TipoDenuncia::where('area_id','=',$miArea)->get();   // tipos de areas del usuario
         $datos=[];
         $i=0;
@@ -708,19 +761,80 @@ class DenunciasController extends Controller
         }
         
         return response()->json([
-            'datos'=>$datos[0]
+            'datos'=>$datos,
+            // 'hombre: ' =>$areas
         ]);
 
 
     }
 
-    public function filtrarDenuncia(Request $request) {
+    public function filtrarDenuncia(Request $request) {         // ESTE FILTRO ES PARA LOS SELECTS
+      
+
+        $miArea = auth()->user()->area_id;
+        $areas=TipoDenuncia::where('area_id','=',$miArea)->get();   // tipos de areas del usuario
+        $datos=[];
+        $i=0;
+        $pedidos = new Collection([]);
+        //$hoy = Carbon::now();
+        $fecha =$request['fecha'];
+        $fecha='1';
         $estado = $request['estado'];
-        $fecha = $request['fecha'];
+        $estado = 0;
+        if($fecha == '0'){          // FECHAS DE HOY DIA
+            foreach($areas as $area){
+                $hoy=Carbon::now();
+                $pedidos = DB::table('denuncias')
+                    ->join('tipos_denuncia','tipos_denuncia.id' , '=', 'denuncias.tipo_denuncia')
+                    ->where('denuncias.tipo_denuncia', $area->id)->where('denuncias.estado','=',$estado)
+                    ->whereDate('denuncias.fecha', '=', $hoy)
+                    ->select('denuncias.*')->get();
+                    if($pedidos){
+                        $datos[$i]=$pedidos;
+                        $i=$i+1;
+                    }
+                return response()->json([
+                    'pedidos' => $pedidos,
+                ]);
+            }
+        }
+        if($fecha=='2'){            // FECHAS DE UN MES
+            foreach($areas as $area){
+                $hoy=Carbon::now();
+                $pedidos = DB::table('denuncias')
+                    ->join('tipos_denuncia','tipos_denuncia.id' , '=', 'denuncias.tipo_denuncia')
+                    ->where('denuncias.tipo_denuncia', $area->id)->where('denuncias.estado','=',$estado)
+                    ->whereMonth('denuncias.fecha', '>=', $hoy->month-1)
+                    ->select('denuncias.*')->get();
+                    if($pedidos){
+                        $datos[$i]=$pedidos;
+                        $i=$i+1;
+                    }
+                    
+    
+            }
+
+        }
+        if($fecha =='1'){           // FECHAS DE UNA SEMANA
+            foreach($areas as $area){
+                $hoy=Carbon::now();
+                $pedidos = DB::table('denuncias')
+                    ->join('tipos_denuncia','tipos_denuncia.id' , '=', 'denuncias.tipo_denuncia')
+                    ->where('denuncias.tipo_denuncia', $area->id)->where('denuncias.estado','=',$estado)
+                    ->whereDay('denuncias.fecha', '>=', $hoy->month-7)
+                    ->select('denuncias.*')->get();
+                    if($pedidos){
+                        $datos[$i]=$pedidos;
+                        $i=$i+1;
+                    }
+    
+            }
+        }
+        
         return response()->json([
-            'Estado' => $estado,
-            'Fecha' => $fecha 
+            'datos'=>$datos,
         ]);
+
     }
    
 

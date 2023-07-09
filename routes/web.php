@@ -26,6 +26,9 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 
+Route::get('/mapaPublic',[BuzonController::class,'mapaPublico'])->name('publico');
+
+
 Route::prefix('administrativo')->name('administrativos.')->middleware(['auth'])->group(function(){
 
     
@@ -37,7 +40,6 @@ Route::prefix('administrativo')->name('administrativos.')->middleware(['auth'])-
     Route::post('updateAdmin/{admin}',[UserController::class,'update'])->name('update');
     Route::delete('deleteAdmin/{admin}',[UserController::class,'destroy'])->name('destroy');
     Route::get('/denunciasAdmin',[UserController::class,'misDenuncias'])->name('misDenuncias');
-
 
 });
 
@@ -82,6 +84,11 @@ Route::prefix('buzon')->name('buzon.')->middleware(['auth'])->group(function(){
 
 
     Route::get('/mapaDenuncias',[BuzonController::class,'mapas'])->name('mapa');
+
+
+
+    // Route::get('/filtrarIndex',[BuzonController::class,'denuncias'])->
+    
 
 
 });

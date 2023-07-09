@@ -341,12 +341,17 @@ return [
         ],
         [
             'isset' => '$variable',
-            'text' => 'no funka',
-            'route'  => 'tipos_denuncias.create',
+            'text' => 'Mapa de Denuncias',
+            'route'  => 'buzon.mapa',
             'icon' => 'fas fa-fw fa-lock',
         ],
         [
-            'text'    => 'Buzon de denuncias',
+            'text' => 'Mis Denuncias',
+            'route'  => 'buzon.index',
+            'icon' => 'fas fa-chart-area',
+        ],
+        [
+            'text'    => 'multilevel',
             'icon'    => 'fas fa-fw fa-share',
             'submenu' => [
                 [
