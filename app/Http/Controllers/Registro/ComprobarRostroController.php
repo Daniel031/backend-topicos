@@ -9,6 +9,7 @@ use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use App\Models\Segip;
+use Illuminate\Support\Facades\Log;
 class ComprobarRostroController extends Controller
 {
     /**
@@ -23,18 +24,22 @@ class ComprobarRostroController extends Controller
     public function comparar(Request $request){
 
 
-        
+
 
         $fotoSegip = Segip::where('ci','=',$request['ci'])->get()->first();
         
 
         if ($request->hasFile('imagen') &&  $fotoSegip) {
-                $imagen = $request->file('imagen');
+                $imagen = $request['imagen'];
                 $ci = $request['ci'];
-
+                $destinationPath = "/tmp/$ci.jpg";
+                move_uploaded_file($imagen, $destinationPath);
+                $imagen = $destinationPath;
                 $urlSegip=$fotoSegip->foto;
+                //Log::info("$imagen");
+
                     // DESCOMENTAR ESTA LINEA 
-                // $fotoCloud =Cloudinary::upload($imagen,['folders'=>'fotografos']);
+                 $fotoCloud =Cloudinary::upload($imagen,['folders'=>'fotografos']);
 
                 $cliente = new RekognitionClient([
                     'region' => env('AWS_DEFAULT_REGION'),
@@ -54,11 +59,11 @@ class ComprobarRostroController extends Controller
         
 
                      // DESCOMENTAR ESTAS 2 LINEA DE ABAJO
-                // $public_id=$fotoCloud->getPublicId();
-                //$url =$fotoCloud->getSecurePath();
+                 $public_id=$fotoCloud->getPublicId();
+                $url =$fotoCloud->getSecurePath();
 
                         // COMENTAR ESTA LINEA DE ABAJO
-                $url = 'https://res.cloudinary.com/dirau81x6/image/upload/v1685390870/R_oucxhh.jpg';
+                //$url = 'https://res.cloudinary.com/dirau81x6/image/upload/v1685390870/R_oucxhh.jpg';
                 
                 $result = $cliente->compareFaces([
                     'SimilarityThreshold' => 70, // Umbral de similitud (ajusta según tus necesidades)
@@ -87,8 +92,6 @@ class ComprobarRostroController extends Controller
                     'mensaje' => 'La Foto No coincide',
                 ]);
                 
-
-
             }
             if($fotoSegip){
             return response()->json([
