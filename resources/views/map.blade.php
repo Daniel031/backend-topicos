@@ -116,64 +116,7 @@
           <div class="col">
             {{-- 1 of 3 --}}
           </div>
-          <div class="col-6">
-            <div class="card" style="background: rgb(58, 216, 166); margin-top: 20px">
-                <div class="card-body">
-  
-                    <div class="container">
-                        <div class="row">
-                          <div class="col">
-  
-                            {{-- alcantarillado --}}
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                                <label class="form-check-label" for="flexCheckChecked">
-                                  Alcantarillado
-                                  <i class="fa-sharp fa-solid fa-droplet fa-lg"></i>
-                                </label>
-                            </div>
-  
-                            {{-- aseo urbano --}}
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                                <label class="form-check-label" for="flexCheckChecked">
-                                  Aseo urbano
-                                </label>
-                            </div>
-  
-                            {{-- vias publicas --}}
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                                <label class="form-check-label" for="flexCheckChecked">
-                                    Vias publicas
-                                </label>
-                            </div>
-  
-  
-                          </div>
-                          <div class="col">
-                            {{-- alumbrado publico --}}
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                                <label class="form-check-label" for="flexCheckChecked">
-                                    Alumbrado publico
-                                </label>
-                            </div>
-  
-  
-                            {{-- areas verdes --}}
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                                <label class="form-check-label" for="flexCheckChecked">
-                                    Areas verdes
-                                </label>
-                            </div>
-                          </div>
-                        </div>
-                    </div>    
-                </div>
-              </div>
-          </div>
+          
           <div class="col">
             {{-- 3 of 3 --}}
           </div>

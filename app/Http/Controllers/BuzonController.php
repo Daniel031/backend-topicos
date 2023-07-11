@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
 use App\Models\Denuncia;
 use App\Models\FotoDenuncia;
+use App\Models\User;
 
 class BuzonController extends Controller
 {
@@ -57,8 +58,11 @@ class BuzonController extends Controller
      */
     public function show(Denuncia $denuncia)
     {
+
         $fotos = FotoDenuncia::where('denuncia_id','=',$denuncia->id)->get(); // fotos de la denuncia
-        return view('buzon.buzon-show',compact('denuncia','fotos'));  
+        $tiposDenuncias = TipoDenuncia::get();
+        $users = User::get();
+        return view('buzon.buzon-show',compact('denuncia','fotos','tiposDenuncias','users'));  
     }
 
     /**
@@ -77,7 +81,8 @@ class BuzonController extends Controller
          $denuncia->estado=$request['estado'];
          $denuncia->save();
 
-         // AQUI TIENE QUE VENIR LA NOTIFICACION PUSH PARA EL USER(APP) -- PROXIMO SPRINT//
+         // AQUI TIENE QUE VENIR LA NOTIFICACION PUSH PARA EL USER(APP) -- PROXIMO SPRINT// Y ACTUALIZAR EL COMENTARIO DE LA DENUNCIA
+         
         return redirect()->route('buzon.index');
 
     }

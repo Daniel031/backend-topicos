@@ -23,7 +23,7 @@ class AreasController extends Controller
      */
     public function create()
     {
-        
+      
         return view('areas.create-areas');
     }
 
@@ -32,6 +32,9 @@ class AreasController extends Controller
      */
     public function store(Request $request)
     {
+
+        dd($request->all());
+
             $area = Area::create([
                 'nombre'=>$request['nombre'],
                 'descripcion'=>$request['descripcion'],
@@ -79,6 +82,13 @@ class AreasController extends Controller
     {
         $area->estado=$area->estado?0:1;
         $area->save();
+        return redirect()->route('areas.index');
+    }
+
+
+
+    public function pruebaEditar($area){
+        dd($area);
         return redirect()->route('areas.index');
     }
 }

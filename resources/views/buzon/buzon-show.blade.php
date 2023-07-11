@@ -48,7 +48,9 @@
 </div>
 
 <div class="acciones">
-    <form action="" method="post">
+    <form action="{{route('buzon.update',$denuncia->id)}}" method="post">
+        @csrf
+        @method('POST')
         <a href="{{route('buzon.index')}}" class="btn btn-danger" >Cancelar</a>
         <input type="submit" class="btn btn-primary" value="Cambiar estado">
         <select class="custom-select dimensionar" name="estado" id="">

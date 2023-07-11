@@ -80,7 +80,10 @@ Route::get('/denuncias-filtradas',[DenunciasController::Class,'filtrarUser']);
 
 
 // ESTA ES RUTA DE ABAJO ES PARA LOS FILTROS POR USER
-Route::post('/filtrar-denuncias',[DenunciasController::Class,'filtrarDenuncia']);
+Route::post('/filtrar-denuncias',[DenunciasController::Class,'filtrarDenuncia']);      // para los users en uso
+
+// TIPOS DE DENUNCIAS PARA MOSTRAR EN LA APP MOVIL
+Route::get('/tipos-denuncias',[DenunciasController::class,'tiposDenuncias']);
 
 
 

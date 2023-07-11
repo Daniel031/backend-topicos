@@ -53,9 +53,11 @@
                   <label for="rango_fecha" class="col-form-label ">Seleccione una fecha</label>
                       <div>
                           <select class="form-control" id="fecha"  onchange="onChangeSelect()" style="background: rgb(196, 196, 196)">
+                            <option value="3" selected>Todas</option>
                               <option value="0">hoy</option>
                               <option value="1">esta semana</option>
                               <option value="2">este mes</option>
+                             
                           </select>
                       </div>
               </div>
@@ -70,8 +72,8 @@
                   <label for="rango_fecha" class="col-form-label ">Seleccione un estado</label>
                   <div>
                       <select class="form-control" id="estado"  onchange="onChangeSelect()" style="background: rgb(196, 196, 196)">
-                          <option value="0">aceptadas</option>
-                          <option value="1">rechazadas</option>
+                          <option value="1">aceptadas</option>
+                          <option value="0">rechazadas</option>
                           <option value="2">pendientes</option>
                       </select>
                   </div>
@@ -142,6 +144,7 @@ crossorigin=""></script>
        }
 
        const formas = [];
+       let puntos = [];
 
         var map = L.map('map').setView([-17.782274492638184, -63.180231223785405], 12);
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -149,72 +152,80 @@ crossorigin=""></script>
           attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
 
-  
-
+        
+        
         function denunciasFiltradas() {
+          
             fetch('http://127.0.0.1:8000/api/denuncias-filtradas')
-          .then(response =>response.json().then( value=>{
-          let denuncias = value.datos;
-      
-         denuncias.forEach(elements => {
+           .then(response =>response.json().then( value=>{
+             let denuncias = value.datos;
+
+              denuncias.forEach(elements => {
+             
               elements.forEach(element=>{
                 dato = element['tipo_denuncia'];
-              let circle = null;
+                let circle = null;
 
         
+            
 
-            if(dato == '1'){
-               circle = L.circle([element['latitud'], element['longitud']], {
-                      color: 'blue',
-                      fillColor: 'blue',
-                      fillOpacity: 0.5,
-                      radius: 50
-                  }).addTo(map);
+                  if(dato == '1'){
+                    circle = L.circle([element['latitud'], element['longitud']], {
+                            color: 'blue',
+                            fillColor: 'blue',
+                            fillOpacity: 0.5,
+                            radius: 50
+                        }).addTo(map);
+                    
+                  }
+                  if(dato == '2'){
+                    circle = L.circle([element['latitud'], element['longitud']], {
+                            color: 'red',
+                            fillColor: 'red',
+                            fillOpacity: 0.5,
+                            radius: 50
+                        }).addTo(map);
+                      
+                  }
+                  if(dato =='3'){
 
-            }
-            if(dato == '2'){
-               circle = L.circle([element['latitud'], element['longitud']], {
-                      color: 'red',
-                      fillColor: 'red',
-                      fillOpacity: 0.5,
-                      radius: 50
-                  }).addTo(map);
+                    circle = L.circle([element['latitud'], element['longitud']], {
+                            color: 'green',
+                            fillColor: 'green',
+                            fillOpacity: 0.5,
+                            radius: 50
+                        }).addTo(map);
+                    
+                  }
 
-            }
-            if(dato =='3'){
+                  if(dato =='4'){
+                    circle = L.circle([element['latitud'], element['longitud']], {
+                            color: 'black',
+                            fillColor: 'black',
+                            fillOpacity: 0.5,
+                            radius: 50
+                        }).addTo(map);
+                      
 
-               circle = L.circle([element['latitud'], element['longitud']], {
-                      color: 'green',
-                      fillColor: 'green',
-                      fillOpacity: 0.5,
-                      radius: 50
-                  }).addTo(map);
-            }
+                  }
+                  if(dato =="5"){
+                    circle = L.circle([element['latitud'], element['longitud']], {
+                            color: 'purple',
+                            fillColor: 'purple',
+                            fillOpacity: 0.7,
+                            radius: 50
+                        }).addTo(map);
+                    
+                  }
 
-            if(dato =='4'){
-               circle = L.circle([element['latitud'], element['longitud']], {
-                      color: 'black',
-                      fillColor: 'black',
-                      fillOpacity: 0.5,
-                      radius: 50
-                  }).addTo(map);
+                  if (circle) {
+                    puntos.push(circle);
+                  }
 
-            }
-            if(dato =="5"){
-               circle = L.circle([element['latitud'], element['longitud']], {
-                      color: 'purple',
-                      fillColor: 'purple',
-                      fillOpacity: 0.7,
-                      radius: 50
-                  }).addTo(map);
+              });// aqui va
 
-            }
-
-            if (circle) {
-              formas.push(circle);
-            }
-
-           });// aqui va
+          //  console.log(puntos);
+           
               
        });
        })).catch((error)=>{
@@ -224,20 +235,15 @@ crossorigin=""></script>
       });
   }
 
-  function clearMap() {
-    formas.forEach((element) => {
-      map.removeLayer(element);
-    });
-    formas.splice(0);
-  }
 
-  function temporizador() {
-    setInterval(() => {
-      denunciasFiltradas();
-      clearMap();
-    }, 1000);
+  function limpiarVector(){
+    console.log(puntos.length);
+    console.log("Estamos aqui con el vector de datos y hay que eliminar los puntos pintados");
   }
- // temporizador();
+  
+
+ 
+
   denunciasFiltradas();
 </script>
 

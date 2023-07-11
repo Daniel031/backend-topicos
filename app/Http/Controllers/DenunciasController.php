@@ -762,7 +762,7 @@ class DenunciasController extends Controller
         
         return response()->json([
             'datos'=>$datos,
-            // 'hombre: ' =>$areas
+            
         ]);
 
 
@@ -774,13 +774,13 @@ class DenunciasController extends Controller
         $miArea = auth()->user()->area_id;
         $areas=TipoDenuncia::where('area_id','=',$miArea)->get();   // tipos de areas del usuario
         $datos=[];
-        $i=0;
-        $pedidos = new Collection([]);
-        //$hoy = Carbon::now();
+       
+        $pedidos = new Collection();
+       
         $fecha =$request['fecha'];
-        $fecha='1';
+      
         $estado = $request['estado'];
-        $estado = 0;
+        $i=0;
         if($fecha == '0'){          // FECHAS DE HOY DIA
             foreach($areas as $area){
                 $hoy=Carbon::now();
@@ -793,9 +793,7 @@ class DenunciasController extends Controller
                         $datos[$i]=$pedidos;
                         $i=$i+1;
                     }
-                return response()->json([
-                    'pedidos' => $pedidos,
-                ]);
+               
             }
         }
         if($fecha=='2'){            // FECHAS DE UN MES
@@ -830,6 +828,21 @@ class DenunciasController extends Controller
     
             }
         }
+
+        if($fecha =='3'){           // FECHAS DE UNA SEMANA
+            foreach($areas as $area){
+                $pedidos = DB::table('denuncias')
+                    ->join('tipos_denuncia','tipos_denuncia.id' , '=', 'denuncias.tipo_denuncia')
+                    ->where('denuncias.tipo_denuncia', $area->id)->where('denuncias.estado','=','1')
+                    ->where('denuncias.estado','=','0')
+                    ->select('denuncias.*')->get();
+                    if($pedidos){
+                        $datos[$i]=$pedidos;
+                        $i=$i+1;
+                    }
+    
+            }
+        }
         
         return response()->json([
             'datos'=>$datos,
@@ -837,5 +850,15 @@ class DenunciasController extends Controller
 
     }
    
+
+
+
+    public function tiposDenuncias(){
+        $tipos = TipoDenuncia::get();
+        return response()->json([
+            'res' => true,
+            'datos'=>$tipos
+        ]);
+    }
 
 }

@@ -53,6 +53,7 @@ Route::prefix('area')->name('areas.')->middleware(['auth'])->group(function(){
     Route::get('/editArea/{area}',[AreasController::class,'edit'])->name('edit');
     Route::post('/updateArea/{area}',[AreasController::class,'update'])->name('update');
     Route::delete('/deleteArea/{area}',[AreasController::class,'destroy'])->name('destroy');
+    Route::get('/editarArea/{area}',[AreasController::class,'pruebaEditar'])->name('prueba');
 
 
 });

@@ -26,7 +26,12 @@ function updateMap(estado, fecha) {
                       fillColor: 'blue',
                       fillOpacity: 0.5,
                       radius: 50
-                  }).addTo(map);
+                  }).addTo(map);   
+                  circle.bindPopup(`Denuncia:${element['descripcion']} <br>
+                                    Titulo: ${element['titulo']} <br>
+                                    Fecha : ${element['fecha']}
+                                    `);
+                 
       
             }
             if(dato == '2'){
@@ -36,6 +41,10 @@ function updateMap(estado, fecha) {
                       fillOpacity: 0.5,
                       radius: 50
                   }).addTo(map);
+                  circle.bindPopup(`Denuncia:${element['descripcion']} <br>
+                                    Titulo: ${element['titulo']} <br>
+                                    Fecha : ${element['fecha']}
+                                    `);
       
             }
             if(dato =='3'){
@@ -46,6 +55,10 @@ function updateMap(estado, fecha) {
                       fillOpacity: 0.5,
                       radius: 50
                   }).addTo(map);
+                  circle.bindPopup(`Denuncia:${element['descripcion']} <br>
+                                    Titulo: ${element['titulo']} <br>
+                                    Fecha : ${element['fecha']}
+                                    `);
             }
       
             if(dato =='4'){
@@ -55,6 +68,10 @@ function updateMap(estado, fecha) {
                       fillOpacity: 0.5,
                       radius: 50
                   }).addTo(map);
+                  circle.bindPopup(`Denuncia:${element['descripcion']} <br>
+                                    Titulo: ${element['titulo']} <br>
+                                    Fecha : ${element['fecha']}
+                                    `);
       
             }
             if(dato =="5"){
@@ -64,6 +81,10 @@ function updateMap(estado, fecha) {
                       fillOpacity: 0.7,
                       radius: 50
                   }).addTo(map);
+                  circle.bindPopup(`Denuncia:${element['descripcion']} <br>
+                                    Titulo: ${element['titulo']} <br>
+                                    Fecha : ${element['fecha']}
+                                    `);
       
             }
         });
