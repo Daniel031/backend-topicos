@@ -76,7 +76,7 @@ class UserController extends Controller
      */
     public function update(Request $request,User $admin)
     {
-        $admin->password=$request['password'];
+        $admin->password = bcrypt($request['password']);
         $admin->name=$request['name'];
         $admin->email=$request['email'];
         $admin->area_id=$request['area_id'];
@@ -91,7 +91,7 @@ class UserController extends Controller
     {
         $admin->estado=$admin->estado?0:1;
         $admin->save();
-        return redirec()->route('administrativos.index');
+        return redirect()->route('administrativos.index');
     }
 
 

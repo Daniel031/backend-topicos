@@ -334,24 +334,8 @@ return [
             'route'  => 'areas.index',
             'icon' => 'fas fa-layer-group',
         ],
-        [
-            'text' => 'Buzon de denuncias',
-            'route'  => 'buzon.index',
-            'icon' => 'fal fa-mailbox',
-        ],
-        [
-            'isset' => '$variable',
-            'text' => 'Mapa de Denuncias',
-            'route'  => 'buzon.mapa',
-            'icon' => 'fas fa-fw fa-lock',
-        ],
-        [
-            'text' => 'Mis Denuncias',
-            'route'  => 'buzon.index',
-            'icon' => 'fas fa-chart-area',
-        ],
-        [
-            'text'    => 'multilevel',
+        [ 
+            'text'    => 'Denuncias',
             'icon'    => 'fas fa-fw fa-share',
             'submenu' => [
                 [

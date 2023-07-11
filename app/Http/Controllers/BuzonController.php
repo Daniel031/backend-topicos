@@ -7,6 +7,7 @@ use App\Models\TipoDenuncia;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
 use App\Models\Denuncia;
+use App\Models\FotoDenuncia;
 
 class BuzonController extends Controller
 {
