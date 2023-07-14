@@ -3,13 +3,20 @@
 @section('title', 'Tipo Denuncias Editar')
 
 @section('content_header')
-    <h1>Editar tipo de denuncia</h1>
+  
+  <div class="title">
+    <h1>Crear tipo de denuncia</h1>
+  </div>
+
 @stop
 
 @section('content')
 <form action="{{route('tipos_denuncias.store')}}" method="POST" >
     @csrf
     @method('POST')
+
+
+    <div class="card card-body centrar">
     <div class="form-group">
       <label for="nombre">Nombre</label>
       <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre de la denuncia"  required>
@@ -31,7 +38,9 @@
     </div>
 
     <a class="btn btn-secondary" href="{{route('tipos_denuncias.index')}}">Atras</a>
+    <hr>
     <button type="submit" class="btn btn-primary">Guardar</button>
+  </div>
   </form>
 
 @stop
@@ -39,8 +48,19 @@
 @section('css')
 
 <style>
-    .denuncias {
+    .centrar {
+      width:70%;
+      margin:auto;
+
         margin-bottom: 10px
+    }
+
+    .title{
+      font-size:3rem;
+      text-align:center;
+      font-family: 'Courier New', Courier, monospace;
+      font-style:bold;
+      font-weight: 600;
     }
 </style>
 

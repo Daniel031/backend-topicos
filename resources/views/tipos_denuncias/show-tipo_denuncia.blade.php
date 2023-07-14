@@ -1,51 +1,76 @@
 @extends('adminlte::page')
 
-@section('title', 'Tipo Denuncias')
+@section('title', 'Usuario Crear')
 
 @section('content_header')
-    <h1>Tipos de denuncias</h1>
+    <div class="title">
+        <h1>Informacion Tipo De Denuncia</h1>
+    </div>
+    
 @stop
 
 @section('content')
 
-<div class="title">
-Nombre
-</div>
-<div class="contain">
- {{$tipoDenuncia->nombre}}
-</div>
-<div class="title">
-    Descripci&oacute;n
-</div>
-<div class="contain">
-    {{$tipoDenuncia->descripcion}}
-</div>
-<div class="title">
-    Area
-</div>
-<div class="contain">
-    @if (!$tipoDenuncia->area_id)
-        Sin definir
-    @else
-     {{$areas->where('id',$tipoDenuncia->area_id)->first()->nombre}} 
-    @endif
+<form action="{{route('tipos_denuncias.update',$tipoDenuncia->id)}}" method="POST" >
+    @csrf
+    @method('POST')
+    <div class="card centrar">
 
-</div>
+ 
+    <div class="container rounded mt-2 mb-2">
+        <div class="row">
+     
+      <div class="col-md-12 border-right">
+        
+          <div class="centrar">
+              <div class="mt-3">
+                 
+                <div class="col-md-12"><label class="labels">Nombre Tipo Denuncia</label><input type="text" class="form-control" placeholder="nombre" name="nombre" value="{{$tipoDenuncia->nombre}}" disabled></div>
+                  
+              </div>
 
-<div class="acciones">
-    <a class="btn btn-primary" href="{{route('tipos_denuncias.edit',$tipoDenuncia)}}">Editar</a>
-    <a class="btn btn-secondary" href="{{route('tipos_denuncias.index')}}">Atras</a>
+              <div class="mt-3">
+
+
+                  <div class="col-md-12"><label class="labels">Descripcion</label><input type="text" class="form-control" placeholder="descripcion" name="descripcion" value="{{$tipoDenuncia->descripcion}}" disabled></div>
+ 
+              </div>
+             
+              <div class="mt-3">
+                <label class="labels">Area</label>
+                    @foreach($areas as $area)
+                            @if($area->id==$tipoDenuncia->area_id)
+                            <input type="text" class="form-control" name="descripcion" value="{{$area->nombre}}" disabled>
+                            @endif
+                    @endforeach  
+                
+            </div>
+            <a href="{{route('tipos_denuncias.index')}}" class="btn btn-primary mt-5 text-center">Volver</a>
+         </div>
+      </div>
+    </div>
+ </div>
 </div>
+</div>
+  </form>
+
 @stop
 
 @section('css')
 
 <style>
-    .title {
-        font-weight: bold
+    .centrar{
+        width: 700px;
+        margin:auto;
+        display:flex;
+        flex-direction: column;
+        justify-content: center
     }
-    .acciones {
-        margin-top: 10px
+
+    .title{
+        font-size:3rem;
+        text-align:center;
+        font-family: 'Courier New', Courier, monospace;
     }
 </style>
 
@@ -55,3 +80,4 @@ Nombre
 
 
 @stop
+

@@ -854,7 +854,7 @@ class DenunciasController extends Controller
 
 
     public function tiposDenuncias(){
-        $tipos = TipoDenuncia::get();
+        $tipos = TipoDenuncia::where('estado','=','1')->get();
         return response()->json([
             'res' => true,
             'datos'=>$tipos

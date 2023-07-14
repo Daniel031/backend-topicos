@@ -81,7 +81,7 @@ Route::prefix('buzon')->name('buzon.')->middleware(['auth'])->group(function(){
     // Route::post('/storeTipoDenuncia',[TipoDenunciaController::class,'store'])->name('store');
     // Route::get('/editTipoDenuncia/{tipoDenuncia}',[TipoDenunciaController::class,'edit'])->name('edit');
     Route::post('/updateDenuncia/{denuncia}',[BuzonController::class,'update'])->name('update');
-    // Route::delete('/deleteTipoDenuncia/{tipoDenuncia}',[TipoDenunciaController::class,'destroy'])->name('destroy');
+    Route::delete('/deleteTipoDenuncia/{denuncia}',[TipoDenunciaController::class,'destroy'])->name('destroy');
 
 
     Route::get('/mapaDenuncias',[BuzonController::class,'mapas'])->name('mapa');

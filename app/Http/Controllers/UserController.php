@@ -59,7 +59,8 @@ class UserController extends Controller
      */
     public function show(User $admin)
     {
-        return view('users.show-users',compact('admin'));
+        $areas = Area::get();
+        return view('users.show-users',compact('admin','areas'));
     }
 
     /**

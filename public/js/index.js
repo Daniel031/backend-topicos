@@ -100,7 +100,7 @@ function onChangeSelect() {
         circle.bindPopup(`Denuncia:${element['descripcion']} <br>
                                     Titulo: ${element['titulo']} <br>
                                     Fecha : ${element['fecha']}<br>
-                                   <a class="btn btn-sm btn-warning" href="${getApiUrl()}/buzon/showDenuncia/${element['id']}">Ruta</a><br>
+                                   <a class="btn btn-sm btn-warning" href="${getApiUrl()}/buzon/showDenuncia/${element['id']}">Ver Denuncia</a><br>
 
                                     
                                     `);

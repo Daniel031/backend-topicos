@@ -13,6 +13,7 @@ class AreasController extends Controller
      */
     public function index()
     {
+        //$areas = Area::where('estado','=',1)->get();
         $areas = Area::get();
         return view('areas.main-areas',compact('areas'));
         
@@ -33,7 +34,7 @@ class AreasController extends Controller
     public function store(Request $request)
     {
 
-        dd($request->all());
+     
 
             $area = Area::create([
                 'nombre'=>$request['nombre'],
@@ -88,7 +89,7 @@ class AreasController extends Controller
 
 
     public function pruebaEditar($area){
-        dd($area);
+        
         return redirect()->route('areas.index');
     }
 }

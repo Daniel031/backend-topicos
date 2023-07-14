@@ -14,7 +14,7 @@ class TipoDenunciaController extends Controller
      */
     public function index()
     {
-        $tipos =TipoDenuncia::get();
+        $tipos =TipoDenuncia::paginate(20);
         return view('tipos_denuncias.main-tipo_denuncia',compact('tipos'));
     }
 

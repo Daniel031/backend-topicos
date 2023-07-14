@@ -9,6 +9,10 @@ use Illuminate\Support\Collection;
 use App\Models\Denuncia;
 use App\Models\FotoDenuncia;
 use App\Models\User;
+use App\Models\Area;
+use App\Models\Comentario;
+use ExpoSDK\Expo;
+use ExpoSDK\ExpoMessage;
 
 class BuzonController extends Controller
 {
@@ -58,11 +62,11 @@ class BuzonController extends Controller
      */
     public function show(Denuncia $denuncia)
     {
-
+        $areas = Area::get();
         $fotos = FotoDenuncia::where('denuncia_id','=',$denuncia->id)->get(); // fotos de la denuncia
         $tiposDenuncias = TipoDenuncia::get();
         $users = User::get();
-        return view('buzon.buzon-show',compact('denuncia','fotos','tiposDenuncias','users'));  
+        return view('buzon.buzon-show',compact('denuncia','fotos','tiposDenuncias','users','areas'));  
     }
 
     /**
@@ -82,6 +86,39 @@ class BuzonController extends Controller
          $denuncia->save();
 
          // AQUI TIENE QUE VENIR LA NOTIFICACION PUSH PARA EL USER(APP) -- PROXIMO SPRINT// Y ACTUALIZAR EL COMENTARIO DE LA DENUNCIA
+         $enviar="";
+         if($denuncia->estado == 1){
+            $enviar ="Su denuncia esta pendiente";
+        }
+         else
+         if($denuncia->estado ==2){
+            $enviar ="Su denuncia esta Aceptada";
+         }else{
+            $enviar ="Su denuncia esta Rechazada";
+         
+         }
+         $messages = [
+            new ExpoMessage([
+                'title' => $enviar,
+                'body' =>$request['comentario'],
+            ]),
+        ];
+        
+        /**
+         * These recipients are used when ExpoMessage does not have "to" set
+         */
+        $defaultRecipients = [
+            'ExponentPushToken[mL9yxeBSP8mXwJyskWuGqq]'
+        ];
+        
+        (new Expo)->send($messages)->to($defaultRecipients)->push();
+
+        $comentario = Comentario::create([
+            'mensaje' => $request['comentario'],
+            'denuncia_id'=>$denuncia->id,
+            'user_id'=> $denuncia->user_id,
+            'datos' => $denuncia->descripcion,
+        ]);
          
         return redirect()->route('buzon.index');
 
@@ -93,6 +130,7 @@ class BuzonController extends Controller
     public function destroy(string $id)
     {
         
+        return redirect()->route('buzon-main');
     }
 
     public function mapas(){

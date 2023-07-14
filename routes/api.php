@@ -31,6 +31,8 @@ Route::post('/users-login',[RegistroController::class,'login']); // se loguea el
 
 Route::post('/users-comprobacion',[ComprobarRostroController::class,'comparar']); // se envia la foto para aws
 
+Route::post('/users-saveAppToken',[RegistroController::class,'saveToken']);
+
 Route::post('/users-actualizarContraseña',[RegistroController::class,'actualizarContraseña']); // se envia la foto para aws
 // Route::get('/users-send',[VerificarEmailController::class,'formularioDatos']);
 // Route::post('/users-verificar',[VerificarEmailController::class,'enviar'])->name('users.formulario');

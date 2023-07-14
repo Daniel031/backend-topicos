@@ -15,6 +15,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 use PhpParser\Node\Stmt\Foreach_;
+use App\Models\Token;
 
 class RegistroController extends Controller
 {
@@ -106,6 +107,19 @@ class RegistroController extends Controller
             ],500);
     
         }
+    }
+
+    public function saveToken(Request $request){
+        $emai = $request['email'];
+        $toke = $request['token'];
+
+        $user = User::all()->where('email',$emai)->first();
+
+        $tokenTable = Token::create([
+            'token' => $toke,
+            'user_id' => $user->id
+        ]);
+
     }
 
     public function login(LoginRequest $request){
